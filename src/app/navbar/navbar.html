@@ -1,1 +1,31 @@
-<p>navbar works!</p>
+<header class="navbar">
+
+    <div class="nav-left">
+
+        <button class="menu-btn" (click)="toggleSidebar()">
+            ☰
+        </button>
+
+        <h2 class="logo">MESS-NOVA</h2>
+
+    </div>
+
+    <div class="nav-right">
+
+        <button class="login-btn">Login</button>
+
+        <button class="signup-btn">Sign Up</button>
+
+    </div>
+
+</header>
+
+<div class="sidebar" [class.active]="isSidebarOpen">
+
+    <a routerLink="/" class="nav-link">Home</a>
+
+    <a routerLink="/about" class="nav-link">About</a>
+
+    <a routerLink="/contact" class="nav-link">Contact</a>
+
+</div>
