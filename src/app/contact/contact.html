@@ -1,1 +1,200 @@
-<p>contact works!</p>
+<section class="hero">
+
+    <span class="badge">
+        WE'RE HERE TO HELP
+    </span>
+
+    <h1>Contact Us</h1>
+
+    <p>
+        Have any questions or suggestions?
+        We'd love to hear from you.
+    </p>
+
+</section>
+
+<section class="contact-container">
+
+    <!-- LEFT PANEL -->
+
+    <div class="contact-info">
+
+        <h2>Get In Touch</h2>
+
+        <div class="item">
+            <div class="icon">📍</div>
+
+            <div>
+                <h4>Address</h4>
+                <p>
+                    Smart Mess Management<br>
+                    College Campus, Tamil Nadu
+                </p>
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="icon">📞</div>
+
+            <div>
+                <h4>Phone</h4>
+                <p>+91 98765 43210</p>
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="icon">✉️</div>
+
+            <div>
+                <h4>Email</h4>
+                <p>messnova@gmail.com</p>
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="icon">🕒</div>
+
+            <div>
+                <h4>Working Hours</h4>
+                <p>Monday - Saturday</p>
+                <p>6 AM - 10 PM</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RIGHT PANEL -->
+
+    <div class="contact-form">
+
+        <h2>Send Us a Message</h2>
+
+        <form (ngSubmit)="submitForm()">
+
+            <div class="row">
+
+                <input
+                type="text"
+                placeholder="Your Name"
+                [(ngModel)]="contactData.name"
+                name="name"
+                required>
+
+                <input
+                type="email"
+                placeholder="Your Email"
+                [(ngModel)]="contactData.email"
+                name="email"
+                required>
+
+            </div>
+
+            <input
+            type="text"
+            placeholder="Subject"
+            [(ngModel)]="contactData.subject"
+            name="subject"
+            required>
+
+            <textarea
+            rows="8"
+            placeholder="Message"
+            [(ngModel)]="contactData.message"
+            name="message"
+            required></textarea>
+
+            <button type="submit">
+                Send Message
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+<!-- SUPPORT BOX -->
+
+<section class="support-box">
+
+    <div class="support-content">
+
+        <div class="support-icon">
+            💬
+        </div>
+
+        <div>
+            <h3>Prefer Quick Support?</h3>
+
+            <p>
+                Chat with us on WhatsApp and we'll get back to you.
+            </p>
+        </div>
+
+    </div>
+
+    <button class="whatsapp-btn">
+        Chat on WhatsApp
+    </button>
+
+</section>
+
+<!-- FOOTER -->
+
+<footer class="footer">
+
+    <div class="footer-container">
+
+        <div class="footer-col">
+            <h2>Mess Nova</h2>
+
+            <p>
+                Making mess management simple,
+                smart & efficient.
+            </p>
+        </div>
+
+        <div class="footer-col">
+
+            <h3>Quick Links</h3>
+
+            <ul>
+                <li>Home</li>
+                <li>Menu</li>
+                <li>My Bookings</li>
+                <li>About Us</li>
+                <li>Contact</li>
+            </ul>
+
+        </div>
+
+        <div class="footer-col">
+
+            <h3>Support</h3>
+
+            <ul>
+                <li>FAQ</li>
+                <li>Help Center</li>
+                <li>Terms & Conditions</li>
+                <li>Privacy Policy</li>
+            </ul>
+
+        </div>
+
+        <div class="footer-col">
+
+            <h3>Contact Info</h3>
+
+            <p>📞 +91 98765 43210</p>
+            <p>✉️ messnova@gmail.com</p>
+            <p>📍 College Campus, Tamil Nadu</p>
+
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        © 2024 Mess Nova. All Rights Reserved.
+    </div>
+
+</footer>
