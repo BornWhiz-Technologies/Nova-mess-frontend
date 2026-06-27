@@ -10,121 +10,149 @@
 
             <p>Welcome to MESS NOVA. Create your account to continue.</p>
 
-            <form>
+<form>
 
-                <!-- Username -->
+    <!-- Username -->
 
-                <div class="input-group">
-                    <label for="username">Username</label>
-                    <input
-                        type="text"
-                        id="username"
-                        placeholder="Enter Username">
-                </div>
+    <div class="input-group">
+        <label for="username">Username</label>
 
-                <!-- Email -->
+        <div class="input-field">
+            <input
+                type="text"
+                id="username"
+                placeholder="Enter Username">
+        </div>
+    </div>
 
-                <div class="input-group">
-                    <label for="email">Email Address</label>
-                    <input
-                        type="email"
-                        id="email"
-                        placeholder="Enter Email Address">
-                </div>
+    <!-- Email -->
 
-                <!-- Mobile -->
+    <div class="input-group">
+        <label for="email">Email Address</label>
 
-                <div class="input-group">
-                    <label for="mobile">Mobile Number</label>
-                    <input
-                        type="tel"
-                        id="mobile"
-                        placeholder="Enter Mobile Number">
-                </div>
+        <div class="input-field">
+            <input
+                type="email"
+                id="email"
+                placeholder="example@gmail.com"
+                (input)="validateEmail($event)">
 
-                <!-- Password -->
+            <small class="error" *ngIf="emailError">
+                {{ emailError }}
+            </small>
+        </div>
+    </div>
 
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        placeholder="Enter Password">
-                </div>
+    <!-- Mobile -->
 
-                <!-- Confirm Password -->
+    <div class="input-group">
+        <label for="mobile">Mobile Number</label>
 
-                <div class="input-group">
-                    <label for="confirmPassword">Confirm Password</label>
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        placeholder="Confirm Password">
-                </div>
+        <div class="input-field">
+            <input
+                type="tel"
+                id="mobile"
+                placeholder="Enter your mobile number"
+                maxlength="10"
+                (input)="validateMobile($event)">
 
-                <!-- Role -->
+            <small class="error" *ngIf="mobileError">
+                {{ mobileError }}
+            </small>
+        </div>
+    </div>
 
-                <p class="role-title">Select Role</p>
+    <!-- Password -->
 
-                <div class="role-box">
+    <div class="input-group">
+        <label for="password">Password</label>
 
-                    <label>
-                        <input
-                            type="radio"
-                            name="role"
-                            value="student">
-                        Student
-                    </label>
+        <div class="input-field">
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter Password">
+        </div>
+    </div>
 
-                    <label>
-                        <input
-                            type="radio"
-                            name="role"
-                            value="manager">
-                        Manager
-                    </label>
+    <!-- Confirm Password -->
 
-                </div>
+    <div class="input-group">
+        <label for="confirmPassword">Confirm Password</label>
 
-                <!-- Signup Button -->
+        <div class="input-field">
+            <input
+                type="password"
+                id="confirmPassword"
+                placeholder="Confirm Password">
+        </div>
+    </div>
 
-                <button type="submit" class="signup-btn">
-                    Sign Up
-                </button>
+    <!-- Role -->
 
-                <!-- Divider -->
+    <p class="role-title">Select Role</p>
 
-                <div class="divider">
+    <div class="role-box">
 
-                    <span>OR</span>
+        <label>
+            <input
+                type="radio"
+                name="role"
+                value="student">
+            Student
+        </label>
 
-                </div>
+        <label>
+            <input
+                type="radio"
+                name="role"
+                value="manager">
+            Manager
+        </label>
 
-                <!-- Google -->
+    </div>
 
-                <button
-                    type="button"
-                    class="google-btn">
+    <!-- Signup Button -->
 
-                    Continue with Google
+    <button
+        type="submit"
+        class="signup-btn">
 
-                </button>
+        Sign Up
 
-                <!-- Login -->
+    </button>
 
-                <div class="login-link">
+    <!-- Divider -->
 
-                    Already have an account?
+    <div class="divider">
+        <span>OR</span>
+    </div>
 
-                    <a routerLink="/login">
+    <!-- Google -->
 
-                        Login
+    <button
+        type="button"
+        class="google-btn">
 
-                    </a>
+        Continue with Google
 
-                </div>
+    </button>
 
-            </form>
+    <!-- Login -->
+
+    <div class="login-link">
+
+        Already have an account?
+
+        <a routerLink="/login">
+
+            Login
+
+        </a>
+
+    </div>
+
+</form>
 
         </div>
 

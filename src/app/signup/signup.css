@@ -56,41 +56,59 @@ body{
     margin-bottom:30px;
     line-height:1.6;
 }
-
 .input-group{
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 18px;
+    display:flex;
+    align-items:flex-start;
+    gap:15px;
+    margin-bottom:18px;
 }
 
 .input-group label{
-    display: inline-block;  /* important */
-    width: 160px;           /* adjust as needed */
+    display: inline-block;   /* important */
+    width: 160px;            /* adjust as needed */
     margin-bottom: 0;
+    margin-top:14px;
 }
 
 .input-group input{
-    width:100%;
-    padding:14px 18px;
-    border:2px solid var(--border);
-    border-radius:12px;
-    outline:none;
-    font-size:15px;
-    transition:.3s ease;
-    background:var(--light);
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #999;      /* Visible border */
+    border-radius: 12px;
+    outline: none;
+    font-size: 15px;
+    transition: .3s ease;
+    background: #fff;
     flex: 1;
 }
 
-.input-group input:hover{
-    border-color:var(--green);
-    background:#ffffff;
+.input-group input:hover,
+.input-group input:focus{
+    border-color: var(--green);
+    background: #fff;
 }
-
 .input-group input:focus{
     border-color:var(--green);
     box-shadow:0 0 12px rgba(111,143,94,.3);
     background:var(--white);
+}
+.input-group input.invalid{
+    border-color:#e53935;
+}
+
+.input-group input.valid{
+    border-color:#4CAF50;
+}
+.input-field{
+    flex:1;
+}
+
+.error{
+    display:block;
+    color:#e53935;
+    font-size:13px;
+    margin-top:5px;
+    font-weight:500;
 }
 
 .role-title{
