@@ -1,0 +1,306 @@
+:root{
+    --green:#6F8F5E;
+    --brown:#8B5E3C;
+    --white:#FFFFFF;
+    --light:#F5F5F5;
+    --border:#D9D9D9;
+    --text:#2F2F2F;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#F5F5F5;
+    height:100%;
+    overflow-x:hidden;
+}
+
+.signup-container{
+    width:100%;
+    min-height:100vh;
+    display:flex;
+}
+
+/* LEFT PANEL */
+
+.left-panel{
+    width:50%;
+    background:white;
+    padding:50px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    box-shadow:0 0 25px rgba(0,0,0,.08);
+    position:relative;
+    z-index:2;
+}
+
+.form-box{
+    width:100%;
+    max-width:430px;
+}
+
+.form-box h2{
+    font-size:38px;
+    color:var(--brown);
+    margin-bottom:10px;
+}
+
+.form-box p{
+    color:#666;
+    margin-bottom:30px;
+    line-height:1.6;
+}
+
+.input-group{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 18px;
+}
+
+.input-group label{
+    display: inline-block;  /* important */
+    width: 160px;           /* adjust as needed */
+    margin-bottom: 0;
+}
+
+.input-group input{
+    width:100%;
+    padding:14px 18px;
+    border:2px solid var(--border);
+    border-radius:12px;
+    outline:none;
+    font-size:15px;
+    transition:.3s ease;
+    background:var(--light);
+    flex: 1;
+}
+
+.input-group input:hover{
+    border-color:var(--green);
+    background:#ffffff;
+}
+
+.input-group input:focus{
+    border-color:var(--green);
+    box-shadow:0 0 12px rgba(111,143,94,.3);
+    background:var(--white);
+}
+
+.role-title{
+    margin-bottom:12px;
+    color:var(--green);
+    font-weight:600;
+    font-size:14px;
+}
+
+.role-box{
+    display:flex;
+    gap:25px;
+    margin-bottom:25px;
+}
+
+.role-box label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    cursor:pointer;
+    transition:.2s ease;
+    color:var(--text);
+}
+
+.role-box label:hover{
+    color:var(--green);
+}
+
+.role-box input[type="radio"]{
+    accent-color:var(--green);
+    cursor:pointer;
+}
+
+/* CREATE ACCOUNT BUTTON */
+
+.signup-btn{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+
+    /* theme color - wood (primary button) */
+    background:#8B5E3C;
+
+    color:#FFFFFF;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+
+    transition:all 0.3s ease;
+    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* HOVER EFFECT */
+.signup-btn:hover{
+    background:#6F8F5E;   /* sage green */
+    transform:translateY(-2px);
+    box-shadow:0 6px 14px rgba(0,0,0,0.2);
+}
+
+/* CLICK EFFECT */
+.signup-btn:active{
+    transform:translateY(0);
+    box-shadow:0 3px 8px rgba(0,0,0,0.15);
+}
+/* ---------- Divider ---------- */
+
+.divider{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:25px 0;
+    color:#888;
+    font-weight:500;
+}
+
+.divider::before,
+.divider::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:#d9d9d9;
+}
+
+.divider span{
+    margin:0 15px;
+}
+
+/* ---------- Google Button ---------- */
+
+.google-btn{
+    width:100%;
+    padding:15px;
+    border:2px solid var(--green);
+    border-radius:12px;
+    background:var(--white);
+    color:var(--green);
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s ease;
+}
+
+.google-btn:hover{
+    background:var(--green);
+    color:white;
+    transform:translateY(-2px);
+    box-shadow:0 8px 16px rgba(111,143,94,.3);
+}
+
+.google-btn:active{
+    transform:translateY(0);
+}
+
+/* ---------- Login Link ---------- */
+
+.login-link{
+    text-align:center;
+    margin-top:25px;
+    color:#666;
+}
+
+.login-link a{
+    color:var(--brown);
+    text-decoration:none;
+    font-weight:600;
+}
+
+.login-link a:hover{
+    color:var(--green);
+}
+
+/* ---------- RIGHT PANEL ---------- */
+
+.right-panel{
+    width:50%;
+    position:relative;
+
+    background-image:url("../assets/signupimage.png");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* Dark Overlay */
+.right-panel::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.35);
+}
+/* ---------- Center Text ---------- */
+
+.image-content{
+    position:relative;
+    z-index:2;
+
+    text-align:center;
+    color:white;
+
+    width:80%;
+}
+
+.image-content h1{
+    font-size:60px;
+    margin-bottom:20px;
+    letter-spacing:2px;
+    text-shadow:0 4px 12px rgba(0,0,0,.4);
+}
+
+.image-content p{
+    font-size:22px;
+    line-height:1.7;
+    text-shadow:0 3px 8px rgba(0,0,0,.4);
+}
+
+/* ---------- Responsive ---------- */
+
+@media(max-width:992px){
+
+    .signup-container{
+        flex-direction:column;
+    }
+
+    .left-panel,
+    .right-panel{
+        width:100%;
+    }
+
+    .right-panel{
+        min-height:350px;
+    }
+
+    .left-panel{
+        padding:35px;
+    }
+
+    .form-box h2{
+        font-size:30px;
+    }
+
+    .image-content h1{
+        font-size:40px;
+    }
+
+    .image-content p{
+        font-size:18px;
+    }
+}
