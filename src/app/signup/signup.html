@@ -10,7 +10,7 @@
 
             <p>Welcome to MESS NOVA. Create your account to continue.</p>
 
-<form>
+<form (ngSubmit)="submit()" #signupForm="ngForm">
 
     <!-- Username -->
 
@@ -21,7 +21,9 @@
             <input
                 type="text"
                 id="username"
-                placeholder="Enter Username">
+                name="username"
+                placeholder="Enter Username"
+                [(ngModel)]="signupData.username">
         </div>
     </div>
 
@@ -34,7 +36,9 @@
             <input
                 type="email"
                 id="email"
+                name="email"
                 placeholder="example@gmail.com"
+                [(ngModel)]="signupData.email"
                 (input)="validateEmail($event)">
 
             <small class="error" *ngIf="emailError">
@@ -52,8 +56,10 @@
             <input
                 type="tel"
                 id="mobile"
+                name="mobileNumber"
                 placeholder="Enter your mobile number"
                 maxlength="10"
+                [(ngModel)]="signupData.mobileNumber"
                 (input)="validateMobile($event)">
 
             <small class="error" *ngIf="mobileError">
@@ -71,7 +77,9 @@
             <input
                 type="password"
                 id="password"
-                placeholder="Enter Password">
+                name="password"
+                placeholder="Enter Password"
+                [(ngModel)]="signupData.password">
         </div>
     </div>
 
@@ -84,7 +92,9 @@
             <input
                 type="password"
                 id="confirmPassword"
-                placeholder="Confirm Password">
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                [(ngModel)]="signupData.confirmPassword">
         </div>
     </div>
 
@@ -98,7 +108,8 @@
             <input
                 type="radio"
                 name="role"
-                value="student">
+                value="student"
+                [(ngModel)]="signupData.role">
             Student
         </label>
 
@@ -106,7 +117,8 @@
             <input
                 type="radio"
                 name="role"
-                value="manager">
+                value="manager"
+                [(ngModel)]="signupData.role">
             Manager
         </label>
 
@@ -121,6 +133,14 @@
         Sign Up
 
     </button>
+
+    <div class="form-message error" *ngIf="registerError">
+      {{ registerError }}
+    </div>
+
+    <div class="form-message success" *ngIf="registerMessage">
+      {{ registerMessage }}
+    </div>
 
     <!-- Divider -->
 
