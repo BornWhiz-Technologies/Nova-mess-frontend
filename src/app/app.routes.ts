@@ -8,6 +8,7 @@ import { ManagerDetails } from './manager-details/manager-details';
 import { AdminDashboard } from './admin-dashboard/admin-dashboard';
 import { ManagerDashboard } from './manager-dashboard/manager-dashboard';
 import { StudentDashboard } from './student-dashboard/student-dashboard';
+import { Studentdetails } from './studentdetails/studentdetails';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -15,11 +16,13 @@ export const routes: Routes = [
   { path: 'contact', component: Contact },
   { path: 'login', component: Login },
   { path: 'signup', component: Signup },
+  { path: 'studentdetails', component: Studentdetails },
   { path: 'manager-details', component: ManagerDetails },
   { path: 'student-dashboard', component: StudentDashboard },
   { path: 'admin-dashboard', component: AdminDashboard },
   { path: 'manager-dashboard', component: ManagerDashboard },
 ];
+   
 
 
 
