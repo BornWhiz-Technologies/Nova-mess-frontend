@@ -23,7 +23,12 @@
                 id="username"
                 name="username"
                 placeholder="Enter Username"
-                [(ngModel)]="signupData.username">
+                [(ngModel)]="signupData.username"
+                (input)="validateUsername($event)">
+
+            <small class="error" *ngIf="usernameError">
+                {{ usernameError }}
+            </small>
         </div>
     </div>
 
@@ -79,7 +84,12 @@
                 id="password"
                 name="password"
                 placeholder="Enter Password"
-                [(ngModel)]="signupData.password">
+                [(ngModel)]="signupData.password"
+                (input)="validatePassword($event)">
+
+            <small class="error" *ngIf="passwordError">
+                {{ passwordError }}
+            </small>
         </div>
     </div>
 
@@ -94,7 +104,12 @@
                 id="confirmPassword"
                 name="confirmPassword"
                 placeholder="Confirm Password"
-                [(ngModel)]="signupData.confirmPassword">
+                [(ngModel)]="signupData.confirmPassword"
+                (input)="validateConfirmPassword()">
+
+            <small class="error" *ngIf="confirmPasswordError">
+                {{ confirmPasswordError }}
+            </small>
         </div>
     </div>
 

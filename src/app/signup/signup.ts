@@ -25,21 +25,47 @@ export class Signup {
     role: 'student'
   };
 
+  usernameError = '';
   emailError = '';
   mobileError = '';
+  passwordError = '';
+  confirmPasswordError = '';
   registerError = '';
   registerMessage = '';
 
   constructor(private arthinew: Auth, private router: Router) {}
 
+  validateUsername(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const originalValue = input.value;
+
+    const filteredValue = originalValue.replace(/[^A-Za-z]/g, '');
+
+    if (originalValue !== filteredValue) {
+      this.usernameError = 'Only alphabets are allowed.';
+    } else {
+      this.usernameError = '';
+    }
+
+    input.value = filteredValue;
+    this.signupData.username = filteredValue;
+  }
+
   validateEmail(event: Event) {
     const input = event.target as HTMLInputElement;
-    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (input.value === '') {
+    let value = input.value;
+
+    value = value.replace(/[^a-zA-Z0-9@._]/g, '');
+    this.signupData.email = value;
+    input.value = value;
+
+    const gmailPattern = /^[a-zA-Z0-9._]+@gmail\.com$/;
+
+    if (value === '') {
       this.emailError = '';
-    } else if (!pattern.test(input.value)) {
-      this.emailError = 'Please enter a valid email address (e.g. example@gmail.com).';
+    } else if (!gmailPattern.test(value)) {
+      this.emailError = 'Please enter a valid Gmail address (example@gmail.com).';
     } else {
       this.emailError = '';
     }
@@ -47,17 +73,52 @@ export class Signup {
 
   validateMobile(event: Event) {
     const input = event.target as HTMLInputElement;
+    const originalValue = input.value;
 
-    input.value = input.value.replace(/[^0-9]/g, '');
+    const filteredValue = originalValue.replace(/[^0-9]/g, '').slice(0, 10);
 
-    if (input.value === '') {
+    if (originalValue !== filteredValue) {
+      this.mobileError = 'Only numbers are allowed.';
+    } else if (filteredValue === '') {
       this.mobileError = '';
-    } else if (input.value.length < 10) {
+    } else if (filteredValue.length !== 10) {
       this.mobileError = 'Please enter a valid 10-digit mobile number.';
-    } else if (input.value.length > 10) {
-      this.mobileError = 'Mobile number must contain exactly 10 digits.';
     } else {
       this.mobileError = '';
+    }
+
+    input.value = filteredValue;
+    this.signupData.mobileNumber = filteredValue;
+  }
+
+  validatePassword(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+
+    this.signupData.password = value;
+
+    const passwordPattern =
+      /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>_\-\\/[\]=+;']).{8,}$/;
+
+    if (value === '') {
+      this.passwordError = '';
+    } else if (!passwordPattern.test(value)) {
+      this.passwordError =
+        'Password must be at least 8 characters and include 1 capital, 1 small, 1 number, and 1 special character.';
+    } else {
+      this.passwordError = '';
+    }
+
+    this.validateConfirmPassword();
+  }
+
+  validateConfirmPassword() {
+    if (this.signupData.confirmPassword === '') {
+      this.confirmPasswordError = '';
+    } else if (this.signupData.password !== this.signupData.confirmPassword) {
+      this.confirmPasswordError = 'Passwords do not match.';
+    } else {
+      this.confirmPasswordError = '';
     }
   }
 
@@ -76,12 +137,48 @@ export class Signup {
       return;
     }
 
+    const gmailPattern = /^[a-zA-Z0-9._]+@gmail\.com$/;
+    const passwordPattern =
+      /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>_\-\\/[\]=+;']).{8,}$/;
+
+    if (!/^[A-Za-z]+$/.test(this.signupData.username)) {
+      this.usernameError = 'Only alphabets are allowed.';
+      this.registerError = 'Please fix the highlighted errors before submitting.';
+      return;
+    }
+
+    if (!gmailPattern.test(this.signupData.email)) {
+      this.emailError = 'Please enter a valid Gmail address (example@gmail.com).';
+      this.registerError = 'Please fix the highlighted errors before submitting.';
+      return;
+    }
+
+    if (!/^[0-9]{10}$/.test(this.signupData.mobileNumber)) {
+      this.mobileError = 'Please enter a valid 10-digit mobile number.';
+      this.registerError = 'Please fix the highlighted errors before submitting.';
+      return;
+    }
+
+    if (!passwordPattern.test(this.signupData.password)) {
+      this.passwordError =
+        'Password must be at least 8 characters and include 1 capital, 1 small, 1 number, and 1 special character.';
+      this.registerError = 'Please fix the highlighted errors before submitting.';
+      return;
+    }
+
     if (this.signupData.password !== this.signupData.confirmPassword) {
+      this.confirmPasswordError = 'Passwords do not match.';
       this.registerError = 'Passwords do not match.';
       return;
     }
 
-    if (this.emailError || this.mobileError) {
+    if (
+      this.usernameError ||
+      this.emailError ||
+      this.mobileError ||
+      this.passwordError ||
+      this.confirmPasswordError
+    ) {
       this.registerError = 'Please fix the highlighted errors before submitting.';
       return;
     }
@@ -90,14 +187,18 @@ export class Signup {
       next: (response) => {
         this.registerMessage = response?.message || 'Account created successfully.';
         alert(this.registerMessage);
-        this.router.navigate(['/login']);
+        if (response.success && this.signupData.role === 'student') 
+          {
+            this.router.navigate(['/studentdetails']);
+          }
+        else{
+          this.router.navigate(['/manager-details']);
+        }
       },
       error: (error) => {
         this.registerError = error?.error?.message || 'Registration failed. Please try again.';
-        console.error('Signup error:', error);
+        alert(this.registerError);
       }
     });
   }
-
-
 }
