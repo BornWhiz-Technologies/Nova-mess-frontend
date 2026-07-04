@@ -1,12 +1,97 @@
-<p>student-dashboard works!</p>
+<div class="dashboard-shell">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">MN</div>
+      <div>
+        <h1>Mess Nova</h1>
+        <p>Student Dashboard</p>
+      </div>
+    </div>
 
+    <div class="topbar-actions">
+      <button class="icon-btn" type="button">🔔 <span>2</span></button>
+      <div class="profile-pill">
+        <span class="avatar">S</span>
+        <div>
+          <strong>{{ studentName }}</strong>
+          <span>{{ rollNumber }}</span>
+        </div>
+      </div>
+      <button class="secondary-btn" type="button">Logout</button>
+    </div>
+  </header>
 
-<pre> hbsdbcudd kncdnc
-    jcwej
-                hb
-                  dwej
-</pre>
+  <div class="content-area">
+    <aside class="sidebar">
+      <nav>
+        <a class="nav-item active" href="#">Dashboard</a>
+        <a class="nav-item" href="#">Today's Menu</a>
+        <a class="nav-item" href="#">Meal Booking</a>
+        <a class="nav-item" href="#">Attendance</a>
+        <a class="nav-item" href="#">Payment History</a>
+        <a class="nav-item" href="#">Feedback</a>
+        <a class="nav-item" href="#">Profile</a>
+        <a class="nav-item" href="#">Logout</a>
+      </nav>
+    </aside>
 
-<p> hbsdbcudd kncdnc
-    jcwejhbdwej
-</p>
+    <main class="main-content">
+      <section class="hero-card">
+        <div>
+          <h2>Welcome back, {{ studentName }}</h2>
+          <p>Your mess schedule is up to date and your meal booking is ready for today.</p>
+        </div>
+        <button class="primary-btn" type="button">Book Meal</button>
+      </section>
+
+      <section class="stats-grid">
+        <article class="card">
+          <h3>Today's Meals</h3>
+          <p>Breakfast: Idli & Sambar</p>
+          <p>Lunch: Veg Biryani</p>
+          <p>Dinner: Rotis & Paneer Curry</p>
+        </article>
+
+        <article class="card">
+          <h3>Meal Booking Status</h3>
+          <p class="status success">Booked for Lunch & Dinner</p>
+          <p>Booking closes at 10:00 AM</p>
+        </article>
+
+        <article class="card">
+          <h3>Attendance Summary</h3>
+          <p>Present: 18 days</p>
+          <p>Absent: 2 days</p>
+          <p>Attendance: 90%</p>
+        </article>
+
+        <article class="card">
+          <h3>Payment Status</h3>
+          <p class="status pending">Pending dues: ₹450</p>
+          <p>Last payment received: 02 Jul</p>
+        </article>
+      </section>
+
+      <section class="bottom-grid">
+        <article class="card wide-card">
+          <h3>Notifications</h3>
+          <ul>
+            <li>New menu is available for tomorrow.</li>
+            <li>Your payment reminder was sent today.</li>
+            <li>Attendance report was updated.</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>Quick Actions</h3>
+          <div class="action-list">
+            <button class="action-btn" type="button">Book Meal</button>
+            <button class="action-btn" type="button">View Attendance</button>
+            <button class="action-btn" type="button">Pay Dues</button>
+            <button class="action-btn" type="button">Submit Feedback</button>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+</div>
