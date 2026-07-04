@@ -20,16 +20,20 @@ export class Login {
     username: '',
     password: ''
   };
+
   constructor(
     private auth: Auth,
     private router: Router
   ) {}
+
   togglePassword(): void {
     this.showPassword = !this.showPassword;
   }
+
   login(): void {
 
     this.loginError = '';
+
     if (
       this.loginData.username.trim() === '' ||
       this.loginData.password.trim() === ''
@@ -37,11 +41,15 @@ export class Login {
       this.loginError = 'Please enter Username and Password';
       return;
     }
+
     this.auth.login(this.loginData).subscribe({
       next: (response: any) => {
+
         const payload = response?.data || response;
+
         const token = payload?.token;
         const role = payload?.role;
+        const userId = payload?.id;
 
         if (!token) {
           this.loginError = 'Login failed. Invalid server response.';
@@ -49,31 +57,48 @@ export class Login {
         }
 
         localStorage.setItem('token', token);
+
+        if (userId) {
+          localStorage.setItem('userId', userId);
+        }
+
         if (role) {
           localStorage.setItem('role', role);
         }
 
         switch (role) {
+
           case 'admin':
             this.router.navigate(['/admin-dashboard']);
             break;
+
           case 'manager':
             this.router.navigate(['/manager-dashboard']);
             break;
+
           case 'student':
             this.router.navigate(['/student-dashboard']);
             break;
+
           default:
             this.loginError = 'Login failed. Unauthorized role.';
             console.error('Login Error: Unknown role', payload);
+
         }
+
       },
+
       error: (error: any) => {
+
         this.loginError =
           error?.error?.message || 'Login failed. Please try again.';
-        console.error('Login Error:', error);
-      }
-    });
-  }
-}
 
+        console.error('Login Error:', error);
+
+      }
+
+    });
+
+  }
+
+}
