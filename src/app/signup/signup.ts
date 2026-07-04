@@ -185,6 +185,9 @@ export class Signup {
 
     this.arthinew.registers(this.signupData).subscribe({
       next: (response) => {
+        if (response.data?.token) {
+          localStorage.setItem('token', response.data.token);
+        }
         this.registerMessage = response?.message || 'Account created successfully.';
         alert(this.registerMessage);
         if (response.success && this.signupData.role === 'student') 

@@ -1,92 +1,108 @@
 <div class="profile-container">
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="overlay">
+      <h1>Complete Your Profile</h1>
 
-    <!-- LEFT PANEL -->
-    <div class="left-panel">
+      <p>Fill in your details to continue to your dashboard.</p>
+    </div>
+  </div>
 
-        <div class="overlay">
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div class="form-container">
+      <h2>Student Profile</h2>
 
-            <h1>Complete Your Profile</h1>
-
-            <p>
-                Fill in your details to continue to your dashboard.
-            </p>
-
+      <form (ngSubmit)="validateForm()">
+        <!-- Profile Picture -->
+        <div class="form-group">
+          <label>Profile Picture</label>
+          <input type="file" accept="image/*" name="profilePicture" />
         </div>
 
-    </div>
+        <!-- Full Name -->
+        <div class="form-group">
+          <label>Full Name</label>
+          <input
+            type="text"
+            name="name"
+            [(ngModel)]="student.name"
+            (input)="validateName()"
+            placeholder="Enter your full name"
+          />
+        </div>
+        <small style="color: red" *ngIf="nameError">
+          {{ nameError }}
+        </small>
 
-    <!-- RIGHT PANEL -->
-    <div class="right-panel">
+        <!-- Register Number -->
+        <div class="form-group">
+          <label>Register Number</label>
+          <input
+            type="text"
+            name="regno"
+            [(ngModel)]="student.regno"
+            (input)="validateRegNo()"
+            placeholder="Enter Register Number"
+          />
+        </div>
+        <small style="color: red" *ngIf="regError">
+          {{ regError }}
+        </small>
 
-        <!-- THIS WRAPPER ADDED -->
-        <div class="form-container">
+        <!-- Department -->
+        <div class="form-group">
+          <label>Department</label>
 
-            <h2>Student Profile</h2>
-
-            <form>
-
-                <div class="form-group">
-                    <label>Profile Picture</label>
-                    <input type="file" accept="image/*">
-                </div>
-
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" placeholder="Enter your full name">
-                </div>
-
-                <div class="form-group">
-                    <label>Register Number</label>
-                    <input type="text" placeholder="Enter Register Number">
-                </div>
-
-                <div class="form-group">
-                    <label>Department</label>
-                    <select>
-                        <option selected disabled>Select Department</option>
-                        <option>Information Technology (IT)</option>
-                        <option>Computer Science and Engineering (CSE)</option>
-                        <option>Artificial Intelligence & Data Science (AIDS)</option>
-                        <option>Artificial Intelligence & Machine Learning (AIML)</option>
-                        <option>Computer Science and Business Systems (CSBS)</option>
-                        <option>Electronics and Communication Engineering (ECE)</option>
-                        <option>Electrical and Electronics Engineering (EEE)</option>
-                        <option>Electronics and Instrumentation Engineering (EIE)</option>
-                        <option>Mechanical Engineering (MECH)</option>
-                        <option>Civil Engineering (CIVIL)</option>
-                        <option>Biomedical Engineering (BME)</option>
-                        <option>Agricultural Engineering (AGRI)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Year</label>
-                    <select>
-                        <option selected disabled>Select Year</option>
-                        <option>I Year</option>
-                        <option>II Year</option>
-                        <option>III Year</option>
-                        <option>IV Year</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Section</label>
-                    <select>
-                        <option selected disabled>Select Section</option>
-                        <option>A</option>
-                        <option>B</option>
-                        <option>C</option>
-                        <option>D</option>
-                    </select>
-                </div>
-
-                <button type="submit">Save & Continue</button>
-
-            </form>
-
+          <select name="department" [(ngModel)]="student.department">
+            <option value="" disabled>Select Department</option>
+            <option value="IT">Information Technology (IT)</option>
+            <option value="CSE">Computer Science and Engineering (CSE)</option>
+            <option value="AIDS">Artificial Intelligence & Data Science (AIDS)</option>
+            <option value="AIML">Artificial Intelligence & Machine Learning (AIML)</option>
+            <option value="CSBS">Computer Science and Business Systems (CSBS)</option>
+            <option value="ECE">Electronics and Communication Engineering (ECE)</option>
+            <option value="EEE">Electrical and Electronics Engineering (EEE)</option>
+            <option value="EIE">Electronics and Instrumentation Engineering (EIE)</option>
+            <option value="MECH">Mechanical Engineering (MECH)</option>
+            <option value="CIVIL">Civil Engineering (CIVIL)</option>
+            <option value="BME">Biomedical Engineering (BME)</option>
+            <option value="AGRI">Agricultural Engineering (AGRI)</option>
+          </select>
         </div>
 
-    </div>
+        <!-- Year -->
+        <div class="form-group">
+          <label>Year</label>
 
+          <select name="year" [(ngModel)]="student.year">
+            <option value="" disabled>Select Year</option>
+            <option value="I Year">I Year</option>
+            <option value="II Year">II Year</option>
+            <option value="III Year">III Year</option>
+            <option value="IV Year">IV Year</option>
+          </select>
+        </div>
+
+        <!-- Section -->
+        <div class="form-group">
+          <label>Section</label>
+
+          <select name="section" [(ngModel)]="student.section">
+            <option value="" disabled>Select Section</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+          </select>
+        </div>
+
+        <div *ngIf="saveError" style="color: red; margin-bottom: 15px">
+          {{ saveError }}
+        </div>
+
+        <button type="button" (click)="validateForm()">Save & Continue</button>
+      </form>
+    </div>
+  </div>
 </div>
