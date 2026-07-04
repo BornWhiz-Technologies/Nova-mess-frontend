@@ -1,1 +1,218 @@
-<p>manager-dashboard works!</p>
+<div class="dashboard">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <h2>🍽️ Mess Nova</h2>
+
+            <p>Manager Panel</p>
+
+        </div>
+
+        <ul class="menu">
+
+            <li class="active">
+                <span>🏠</span>
+                Dashboard
+            </li>
+
+            <li>
+                <span>👨‍🎓</span>
+                Students
+            </li>
+
+            <li>
+                <span>🍽️</span>
+                Menu
+            </li>
+
+            <li>
+                <span>📅</span>
+                Attendance
+            </li>
+
+            <li>
+                <span>📦</span>
+                Inventory
+            </li>
+
+            <li>
+                <span>💬</span>
+                Complaints
+            </li>
+
+            <li>
+                <span>📊</span>
+                Reports
+            </li>
+
+            <li>
+                <span>👤</span>
+                Profile
+            </li>
+
+            <li class="logout">
+                <span>🚪</span>
+                Logout
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- Main Content -->
+
+    <main class="content">
+
+        <!-- Navbar -->
+
+        <header class="navbar">
+
+            <div>
+
+                <h1>Welcome Back 👋</h1>
+
+                <p>Manage your mess with confidence.</p>
+
+            </div>
+
+            <div class="profile">
+
+                <div class="notification">
+
+                    🔔
+
+                </div>
+
+                <div class="avatar">
+
+                    👨‍💼
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- Statistics Cards -->
+
+        <section class="cards">
+
+            <div class="card" *ngFor="let item of stats">
+
+                <div class="icon">
+
+                    {{item.icon}}
+
+                </div>
+
+                <div>
+
+                    <h2>{{item.value}}</h2>
+
+                    <p>{{item.title}}</p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Two Column -->
+
+        <section class="grid">
+
+            <!-- Today's Menu -->
+
+            <div class="panel">
+
+                <h2>🍽️ Today's Menu</h2>
+
+                <div class="menu-list" *ngFor="let menu of todaysMenu">
+
+                    <div>
+
+                        <h4>{{menu.meal}}</h4>
+
+                        <p>{{menu.items}}</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Weekly Progress -->
+
+            <div class="panel">
+
+                <h2>📈 Weekly Meals</h2>
+
+                <div class="chart">
+
+                    <div class="bar mon">
+
+                        <span>Mon</span>
+
+                    </div>
+
+                    <div class="bar tue">
+
+                        <span>Tue</span>
+
+                    </div>
+
+                    <div class="bar wed">
+
+                        <span>Wed</span>
+
+                    </div>
+
+                    <div class="bar thu">
+
+                        <span>Thu</span>
+
+                    </div>
+
+                    <div class="bar fri">
+
+                        <span>Fri</span>
+
+                    </div>
+
+                    <div class="bar sat">
+
+                        <span>Sat</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Recent Activities -->
+
+        <section class="panel activity">
+
+            <h2>📋 Recent Activities</h2>
+
+            <ul>
+
+                <li *ngFor="let activity of recentActivities">
+
+                    ✅ {{activity}}
+
+                </li>
+
+            </ul>
+
+        </section>
+
+    </main>
+
+</div>
