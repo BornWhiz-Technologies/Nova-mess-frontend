@@ -203,11 +203,11 @@ export class Signup {
     }
 
     this.arthinew.registers(this.signupData).subscribe({
-
-      next: (response: any) => {
-
-        this.registerMessage =
-          response?.message || 'Account created successfully.';
+      next: (response) => {
+        if (response.data?.token) {
+          localStorage.setItem('token', response.data.token);
+        }
+        this.registerMessage = response?.message || 'Account created successfully.';
 
         const data = response.data;
 
