@@ -16,6 +16,7 @@ import { Auth } from '../services/auth';
   styleUrl: './signup.css'
 })
 export class Signup {
+
   signupData = {
     username: '',
     email: '',
@@ -33,7 +34,10 @@ export class Signup {
   registerError = '';
   registerMessage = '';
 
-  constructor(private arthinew: Auth, private router: Router) {}
+  constructor(
+    private arthinew: Auth,
+    private router: Router
+  ) {}
 
   validateUsername(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -65,7 +69,8 @@ export class Signup {
     if (value === '') {
       this.emailError = '';
     } else if (!gmailPattern.test(value)) {
-      this.emailError = 'Please enter a valid Gmail address (example@gmail.com).';
+      this.emailError =
+        'Please enter a valid Gmail address (example@gmail.com).';
     } else {
       this.emailError = '';
     }
@@ -115,7 +120,9 @@ export class Signup {
   validateConfirmPassword() {
     if (this.signupData.confirmPassword === '') {
       this.confirmPasswordError = '';
-    } else if (this.signupData.password !== this.signupData.confirmPassword) {
+    } else if (
+      this.signupData.password !== this.signupData.confirmPassword
+    ) {
       this.confirmPasswordError = 'Passwords do not match.';
     } else {
       this.confirmPasswordError = '';
@@ -123,6 +130,7 @@ export class Signup {
   }
 
   submit() {
+
     this.registerError = '';
     this.registerMessage = '';
 
@@ -138,35 +146,45 @@ export class Signup {
     }
 
     const gmailPattern = /^[a-zA-Z0-9._]+@gmail\.com$/;
+
     const passwordPattern =
       /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>_\-\\/[\]=+;']).{8,}$/;
 
     if (!/^[A-Za-z]+$/.test(this.signupData.username)) {
       this.usernameError = 'Only alphabets are allowed.';
-      this.registerError = 'Please fix the highlighted errors before submitting.';
+      this.registerError =
+        'Please fix the highlighted errors before submitting.';
       return;
     }
 
     if (!gmailPattern.test(this.signupData.email)) {
-      this.emailError = 'Please enter a valid Gmail address (example@gmail.com).';
-      this.registerError = 'Please fix the highlighted errors before submitting.';
+      this.emailError =
+        'Please enter a valid Gmail address (example@gmail.com).';
+      this.registerError =
+        'Please fix the highlighted errors before submitting.';
       return;
     }
 
     if (!/^[0-9]{10}$/.test(this.signupData.mobileNumber)) {
-      this.mobileError = 'Please enter a valid 10-digit mobile number.';
-      this.registerError = 'Please fix the highlighted errors before submitting.';
+      this.mobileError =
+        'Please enter a valid 10-digit mobile number.';
+      this.registerError =
+        'Please fix the highlighted errors before submitting.';
       return;
     }
 
     if (!passwordPattern.test(this.signupData.password)) {
       this.passwordError =
         'Password must be at least 8 characters and include 1 capital, 1 small, 1 number, and 1 special character.';
-      this.registerError = 'Please fix the highlighted errors before submitting.';
+      this.registerError =
+        'Please fix the highlighted errors before submitting.';
       return;
     }
 
-    if (this.signupData.password !== this.signupData.confirmPassword) {
+    if (
+      this.signupData.password !==
+      this.signupData.confirmPassword
+    ) {
       this.confirmPasswordError = 'Passwords do not match.';
       this.registerError = 'Passwords do not match.';
       return;
@@ -179,26 +197,51 @@ export class Signup {
       this.passwordError ||
       this.confirmPasswordError
     ) {
-      this.registerError = 'Please fix the highlighted errors before submitting.';
+      this.registerError =
+        'Please fix the highlighted errors before submitting.';
       return;
     }
 
     this.arthinew.registers(this.signupData).subscribe({
-      next: (response) => {
-        this.registerMessage = response?.message || 'Account created successfully.';
+
+      next: (response: any) => {
+
+        this.registerMessage =
+          response?.message || 'Account created successfully.';
+
+        const data = response.data;
+
+        // Save user details
+        localStorage.setItem('userId', data.id);
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('role', data.role);
+
         alert(this.registerMessage);
-        if (response.success && this.signupData.role === 'student') 
-          {
-            this.router.navigate(['/studentdetails']);
-          }
-        else{
+
+        if (data.role === 'student') {
+
+          this.router.navigate(['/studentdetails']);
+
+        } else if (data.role === 'manager') {
+
           this.router.navigate(['/manager-details']);
+
         }
+
       },
-      error: (error) => {
-        this.registerError = error?.error?.message || 'Registration failed. Please try again.';
+
+      error: (error: any) => {
+
+        this.registerError =
+          error?.error?.message ||
+          'Registration failed. Please try again.';
+
         alert(this.registerError);
+
       }
+
     });
+
   }
+
 }
