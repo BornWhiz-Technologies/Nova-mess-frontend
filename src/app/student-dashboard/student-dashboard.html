@@ -1,97 +1,168 @@
-<div class="dashboard-shell">
-  <header class="topbar">
-    <div class="brand">
-      <div class="brand-mark">MN</div>
+<div class="dashboard-container">
+  <!-- Header -->
+  <div class="header">
+    <div class="welcome">
+      <h2>👋 Hi, {{ studentName }}</h2>
+
+      <p>Good Morning 🌤</p>
+    </div>
+
+    <div class="header-icons">
+      <span class="material-icons notification"> notifications </span>
+
+      <span class="material-icons profile"> account_circle </span>
+    </div>
+  </div>
+
+  <!-- Student Card -->
+
+  <div class="student-card">
+    <div class="student-info">
+      <h3>{{ studentName }}</h3>
+
+      <p>{{ department }}</p>
+
+      <p>{{ year }} • Section {{ section }}</p>
+    </div>
+  </div>
+
+  <!-- Today's Menu -->
+
+  <div class="card">
+    <div class="card-title">🍽 Today's Menu</div>
+
+    <div class="menu-item">
       <div>
-        <h1>Mess Nova</h1>
-        <p>Student Dashboard</p>
+        <h4>{{ todayMenu.foodName }}</h4>
+
+        <p>₹ {{ todayMenu.price }}</p>
+      </div>
+
+      <button>Order</button>
+    </div>
+  </div>
+
+  <!-- Today's Special -->
+
+  <div class="card">
+    <div class="card-title">⭐ Today's Special</div>
+
+    <div class="special-food">
+      <img [src]="todaySpecial.image" alt="food" />
+
+      <div>
+        <h4>{{ todaySpecial.foodName }}</h4>
+
+        <p>{{ todaySpecial.description }}</p>
       </div>
     </div>
+  </div>
 
-    <div class="topbar-actions">
-      <button class="icon-btn" type="button">🔔 <span>2</span></button>
-      <div class="profile-pill">
-        <span class="avatar">S</span>
-        <div>
-          <strong>{{ studentName }}</strong>
-          <span>{{ rollNumber }}</span>
-        </div>
-      </div>
-      <button class="secondary-btn" type="button">Logout</button>
+  <!-- Remaining Quantity -->
+
+  <div class="card">
+    <div class="card-title">📦 Remaining Quantity</div>
+
+    <div class="quantity">
+      <h2>{{ todayMenu.available }}</h2>
+
+      <p>Meals Available</p>
     </div>
-  </header>
+  </div>
 
-  <div class="content-area">
-    <aside class="sidebar">
-      <nav>
-        <a class="nav-item active" href="#">Dashboard</a>
-        <a class="nav-item" href="#">Today's Menu</a>
-        <a class="nav-item" href="#">Meal Booking</a>
-        <a class="nav-item" href="#">Attendance</a>
-        <a class="nav-item" href="#">Payment History</a>
-        <a class="nav-item" href="#">Feedback</a>
-        <a class="nav-item" href="#">Profile</a>
-        <a class="nav-item" href="#">Logout</a>
-      </nav>
-    </aside>
+  <!-- Meal Timing -->
 
-    <main class="main-content">
-      <section class="hero-card">
-        <div>
-          <h2>Welcome back, {{ studentName }}</h2>
-          <p>Your mess schedule is up to date and your meal booking is ready for today.</p>
-        </div>
-        <button class="primary-btn" type="button">Book Meal</button>
-      </section>
+  <div class="card">
+    <div class="card-title">⏰ Meal Timing</div>
 
-      <section class="stats-grid">
-        <article class="card">
-          <h3>Today's Meals</h3>
-          <p>Breakfast: Idli & Sambar</p>
-          <p>Lunch: Veg Biryani</p>
-          <p>Dinner: Rotis & Paneer Curry</p>
-        </article>
+    <div class="timing">
+      <div>
+        🍳 Breakfast
 
-        <article class="card">
-          <h3>Meal Booking Status</h3>
-          <p class="status success">Booked for Lunch & Dinner</p>
-          <p>Booking closes at 10:00 AM</p>
-        </article>
+        <span>7:30 AM - 9:00 AM</span>
+      </div>
 
-        <article class="card">
-          <h3>Attendance Summary</h3>
-          <p>Present: 18 days</p>
-          <p>Absent: 2 days</p>
-          <p>Attendance: 90%</p>
-        </article>
+      <div>
+        🍛 Lunch
 
-        <article class="card">
-          <h3>Payment Status</h3>
-          <p class="status pending">Pending dues: ₹450</p>
-          <p>Last payment received: 02 Jul</p>
-        </article>
-      </section>
+        <span>12:00 PM - 2:00 PM</span>
+      </div>
 
-      <section class="bottom-grid">
-        <article class="card wide-card">
-          <h3>Notifications</h3>
-          <ul>
-            <li>New menu is available for tomorrow.</li>
-            <li>Your payment reminder was sent today.</li>
-            <li>Attendance report was updated.</li>
-          </ul>
-        </article>
+      <div>
+        🌙 Dinner
 
-        <article class="card">
-          <h3>Quick Actions</h3>
-          <div class="action-list">
-            <button class="action-btn" type="button">Book Meal</button>
-            <button class="action-btn" type="button">View Attendance</button>
-            <button class="action-btn" type="button">Pay Dues</button>
-            <button class="action-btn" type="button">Submit Feedback</button>
-          </div>
-        </article>
-      </section>
-    </main>
+        <span>7:00 PM - 9:00 PM</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Announcement -->
+
+  <div class="card">
+    <div class="card-title">📢 Announcement</div>
+
+    <ul>
+      <li *ngFor="let item of announcements">
+        {{ item }}
+      </li>
+    </ul>
+  </div>
+
+  <!-- Weekly Order -->
+
+  <div class="card">
+    <div class="card-title">📈 Weekly Orders</div>
+
+    <div class="graph-box">Weekly Graph Here</div>
+  </div>
+
+  <!-- Recent Orders -->
+
+  <div class="card">
+    <div class="card-title">🧾 Recent Orders</div>
+
+    <div class="recent-order" *ngFor="let order of recentOrders">
+      <div>
+        <h4>
+          {{ order.foodName }}
+        </h4>
+
+        <small>
+          {{ order.date }}
+        </small>
+      </div>
+
+      <span class="status">
+        {{ order.status }}
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom Navigation -->
+
+<div class="bottom-nav">
+  <div class="nav-item active" (click)="goHome()">
+    <span class="material-icons"> home </span>
+
+    <small> Home </small>
+  </div>
+
+  <div class="nav-item" (click)="goMenu()">
+    <span class="material-icons"> restaurant_menu </span>
+
+    <small> Menu </small>
+  </div>
+
+  <div class="nav-item" (click)="goOrders()">
+    <span class="material-icons"> shopping_bag </span>
+
+    <small> Orders </small>
+  </div>
+
+  <div class="nav-item" (click)="goProfile()">
+    <span class="material-icons"> person </span>
+
+    <small> Profile </small>
   </div>
 </div>
