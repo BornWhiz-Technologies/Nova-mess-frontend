@@ -2,6 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
+    "rootDir": "./src",
     "types": []
   },
   "files": [
@@ -10,4 +11,4 @@
   "include": [
     "src/**/*.d.ts"
   ]
-}/* You can add global styles to this file, and also import other style files */
+}
