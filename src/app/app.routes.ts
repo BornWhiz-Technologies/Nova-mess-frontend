@@ -10,6 +10,7 @@ import { ManagerDashboard } from './manager-dashboard/manager-dashboard';
 import { StudentDashboard } from './student-dashboard/student-dashboard';
 import { Studentdetails } from './studentdetails/studentdetails';
 import { AboutUs } from './about-us/about-us';
+import { InternForm } from './intern-form/intern-form';
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -22,7 +23,8 @@ export const routes: Routes = [
   { path: 'student-dashboard', component: StudentDashboard },
   { path: 'admin-dashboard', component: AdminDashboard },
   { path: 'manager-dashboard', component: ManagerDashboard },
-  { path: 'about-ui', component: AboutUs }
+  { path: 'about-ui', component: AboutUs },
+  { path: 'intern-form', component: InternForm }
 ];
    
 
