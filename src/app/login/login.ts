@@ -9,21 +9,20 @@ import { Auth } from '../services/auth';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './login.html',
-  styleUrl: './login.css'
+  styleUrl: './login.css',
 })
 export class Login {
-
   showPassword = false;
   loginError = '';
 
   loginData = {
     username: '',
-    password: ''
+    password: '',
   };
 
   constructor(
     private auth: Auth,
-    private router: Router
+    private router: Router,
   ) {}
 
   togglePassword(): void {
@@ -31,24 +30,19 @@ export class Login {
   }
 
   login(): void {
-
     this.loginError = '';
 
-    if (
-      this.loginData.username.trim() === '' ||
-      this.loginData.password.trim() === ''
-    ) {
+    if (this.loginData.username.trim() === '' || this.loginData.password.trim() === '') {
       this.loginError = 'Please enter Username and Password';
       return;
     }
 
     this.auth.login(this.loginData).subscribe({
       next: (response: any) => {
-
         const payload = response?.data || response;
 
         const token = payload?.token;
-        const role = payload?.role;
+        const role = payload?.role?.toLowerCase();
         const userId = payload?.id;
 
         if (!token) {
@@ -56,18 +50,19 @@ export class Login {
           return;
         }
 
+        /* Token மற்றும் role browser-ல் save ஆகும் */
         localStorage.setItem('token', token);
 
         if (userId) {
-          localStorage.setItem('userId', userId);
+          localStorage.setItem('userId', userId.toString());
         }
 
         if (role) {
           localStorage.setItem('role', role);
         }
 
+        /* Role based dashboard navigation */
         switch (role) {
-
           case 'admin':
             this.router.navigate(['/admin-dashboard']);
             break;
@@ -81,24 +76,19 @@ export class Login {
             break;
 
           default:
+            localStorage.removeItem('token');
+            localStorage.removeItem('role');
+
             this.loginError = 'Login failed. Unauthorized role.';
             console.error('Login Error: Unknown role', payload);
-
         }
-
       },
 
       error: (error: any) => {
-
-        this.loginError =
-          error?.error?.message || 'Login failed. Please try again.';
+        this.loginError = error?.error?.message || 'Login failed. Please try again.';
 
         console.error('Login Error:', error);
-
-      }
-
+      },
     });
-
   }
-
 }

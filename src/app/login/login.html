@@ -1,70 +1,58 @@
 <div class="login-page">
+  <div class="login-container">
+    <!-- LEFT SIDE -->
 
-    <div class="login-container">
+    <div class="login-card">
+      <div class="logo">
+        <h2>🍽️ Mess <span>Nova</span></h2>
+        <p>Smart Mess Management</p>
+      </div>
 
-        <!-- LEFT SIDE -->
-
-        <div class="login-card">
-
-            <div class="logo">
-                <h2>🍽️ Mess <span>Nova</span></h2>
-                <p>Smart Mess Management</p>
-            </div>
-
-            <form (ngSubmit)="login()">
-
-                <div class="input-box">
-                    <label>Username</label>
-                    <input
-                        type="text"
-                        placeholder="Enter Username"
-                        [(ngModel)]="loginData.username"
-                        name="username"
-                        required>
-                </div>
-
-                <div class="input-box">
-                    <label>Password</label>
-
-                    <div class="password-box">
-                        <input
-                            [type]="showPassword ? 'text' : 'password'"
-                            placeholder="Enter Password"
-                            [(ngModel)]="loginData.password"
-                            name="password"
-                            required>
-
-                        <button
-                            type="button"
-                            class="eye-btn"
-                            (click)="togglePassword()">
-                            {{ showPassword ? '🙈' : '👁️' }}
-                        </button>
-                    </div>
-
-                </div>
-
-                <div class="forgot">
-                    <a href="#">Forgot Password?</a>
-                </div>
-
-                <button class="login-btn" type="submit">
-                    LOGIN
-                </button>
-
-            </form>
-
-            <div class="register">
-                Don't have an account?
-                <a routerLink="/signup">Register</a>
-            </div>
-
+      <form (ngSubmit)="login()">
+        <div class="input-box">
+          <label>Username</label>
+          <input
+            type="text"
+            placeholder="Enter Username"
+            [(ngModel)]="loginData.username"
+            name="username"
+            required
+          />
         </div>
 
-        <!-- RIGHT SIDE IMAGE -->
+        <div class="input-box">
+          <label>Password</label>
 
-        <div class="image-section"></div>
+          <div class="password-box">
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              placeholder="Enter Password"
+              [(ngModel)]="loginData.password"
+              name="password"
+              required
+            />
 
+            <button type="button" class="eye-btn" (click)="togglePassword()">
+              {{ showPassword ? '🙈' : '👁️' }}
+            </button>
+          </div>
+        </div>
+
+        <div class="forgot">
+          <a href="#">Forgot Password?</a>
+        </div>
+
+        <button class="login-btn" type="submit">LOGIN</button>
+      </form>
+
+      <div class="register">
+        Don't have an account?
+        <a routerLink="/signup">Register</a>
+      </div>
     </div>
 
+    <!-- RIGHT SIDE IMAGE -->
+
+    <div class="image-section"></div>
+  </div>
 </div>
