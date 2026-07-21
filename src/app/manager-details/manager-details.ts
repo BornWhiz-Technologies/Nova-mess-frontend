@@ -8,13 +8,12 @@ import { Manager } from '../services/manager';
   standalone: true,
   imports: [FormsModule],
   templateUrl: './manager-details.html',
-  styleUrl: './manager-details.css'
+  styleUrl: './manager-details.css',
 })
 export class ManagerDetails {
-
   constructor(
     private managerService: Manager,
-    private router: Router
+    private router: Router,
   ) {}
 
   managerData = {
@@ -22,36 +21,29 @@ export class ManagerDetails {
     fullName: '',
     employeeId: '',
     experience: 0,
-    shift: ''
+    shift: '',
   };
 
-  // Store selected files
   profilePicture!: File;
   employeeIdProof!: File;
 
-  // Profile Picture
   onProfilePictureChange(event: any) {
     if (event.target.files.length > 0) {
       this.profilePicture = event.target.files[0];
     }
   }
 
-  // Employee ID Proof
   onEmployeeIdProofChange(event: any) {
     if (event.target.files.length > 0) {
       this.employeeIdProof = event.target.files[0];
     }
   }
 
-  // Allow only 2 digits for Experience
   limitExperience(event: any) {
-
     let value = event.target.value;
 
-    // Remove non-numeric characters
     value = value.replace(/[^0-9]/g, '');
 
-    // Allow only first 2 digits
     if (value.length > 2) {
       value = value.slice(0, 2);
     }
@@ -61,8 +53,9 @@ export class ManagerDetails {
   }
 
   saveManager() {
-
     const userId = localStorage.getItem('userId');
+
+    console.log('LocalStorage userId :', userId);
 
     if (!userId) {
       alert('User ID not found. Please login again.');
@@ -87,29 +80,28 @@ export class ManagerDetails {
       formData.append('employeeIdProof', this.employeeIdProof);
     }
 
-    this.managerService.saveManagerDetails(formData).subscribe({
+    console.log('===== FormData =====');
 
+    for (const pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
+
+    this.managerService.saveManagerDetails(formData).subscribe({
       next: (response) => {
+        console.log('API Success :', response);
 
         alert(response.message);
 
-        console.log(response);
-
-        // Redirect to Manager Dashboard
         this.router.navigate(['/manager-dashboard']);
-
       },
 
       error: (error) => {
+        console.error('API Error :', error);
 
-        console.error(error);
+        console.log('Backend Response :', error.error);
 
         alert(error.error.message);
-
-      }
-
+      },
     });
-
   }
-
 }

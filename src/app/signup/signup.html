@@ -1,222 +1,185 @@
 <div class="signup-container">
+  <!-- LEFT SIDE FORM -->
 
-    <!-- LEFT SIDE FORM -->
+  <div class="left-panel">
+    <div class="form-box">
+      <h2>Create Account</h2>
 
-    <div class="left-panel">
+      <p>Welcome to MESS NOVA. Create your account to continue.</p>
 
-        <div class="form-box">
+      <form (ngSubmit)="submit()" #signupForm="ngForm">
+        <!-- Username -->
 
-            <h2>Create Account</h2>
+        <div class="input-group">
+          <label for="username">Username</label>
 
-            <p>Welcome to MESS NOVA. Create your account to continue.</p>
-
-<form (ngSubmit)="submit()" #signupForm="ngForm">
-
-    <!-- Username -->
-
-    <div class="input-group">
-        <label for="username">Username</label>
-
-        <div class="input-field">
+          <div class="input-field">
             <input
-                type="text"
-                id="username"
-                name="username"
-                placeholder="Enter Username"
-                [(ngModel)]="signupData.username"
-                (input)="validateUsername($event)">
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Enter Username"
+              [(ngModel)]="signupData.username"
+              (input)="validateUsername($event)"
+            />
 
             <small class="error" *ngIf="usernameError">
-                {{ usernameError }}
+              {{ usernameError }}
             </small>
+          </div>
         </div>
-    </div>
 
-    <!-- Email -->
+        <!-- Email -->
 
-    <div class="input-group">
-        <label for="email">Email Address</label>
+        <div class="input-group">
+          <label for="email">Email Address</label>
 
-        <div class="input-field">
+          <div class="input-field">
             <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="example@gmail.com"
-                [(ngModel)]="signupData.email"
-                (input)="validateEmail($event)">
+              type="email"
+              id="email"
+              name="email"
+              placeholder="example@gmail.com"
+              [(ngModel)]="signupData.email"
+              (input)="validateEmail($event)"
+            />
 
             <small class="error" *ngIf="emailError">
-                {{ emailError }}
+              {{ emailError }}
             </small>
+          </div>
         </div>
-    </div>
 
-    <!-- Mobile -->
+        <!-- Mobile -->
 
-    <div class="input-group">
-        <label for="mobile">Mobile Number</label>
+        <div class="input-group">
+          <label for="mobile">Mobile Number</label>
 
-        <div class="input-field">
+          <div class="input-field">
             <input
-                type="tel"
-                id="mobile"
-                name="mobileNumber"
-                placeholder="Enter your mobile number"
-                maxlength="10"
-                [(ngModel)]="signupData.mobileNumber"
-                (input)="validateMobile($event)">
+              type="tel"
+              id="mobile"
+              name="mobileNumber"
+              placeholder="Enter your mobile number"
+              maxlength="10"
+              [(ngModel)]="signupData.mobileNumber"
+              (input)="validateMobile($event)"
+            />
 
             <small class="error" *ngIf="mobileError">
-                {{ mobileError }}
+              {{ mobileError }}
             </small>
+          </div>
         </div>
-    </div>
 
-    <!-- Password -->
+        <!-- Password -->
 
-    <div class="input-group">
-        <label for="password">Password</label>
+        <div class="input-group">
+          <label for="password">Password</label>
 
-        <div class="input-field">
+          <div class="input-field">
             <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Enter Password"
-                [(ngModel)]="signupData.password"
-                (input)="validatePassword($event)">
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter Password"
+              [(ngModel)]="signupData.password"
+              (input)="validatePassword($event)"
+            />
 
             <small class="error" *ngIf="passwordError">
-                {{ passwordError }}
+              {{ passwordError }}
             </small>
+          </div>
         </div>
-    </div>
 
-    <!-- Confirm Password -->
+        <!-- Confirm Password -->
 
-    <div class="input-group">
-        <label for="confirmPassword">Confirm Password</label>
+        <div class="input-group">
+          <label for="confirmPassword">Confirm Password</label>
 
-        <div class="input-field">
+          <div class="input-field">
             <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                placeholder="Confirm Password"
-                [(ngModel)]="signupData.confirmPassword"
-                (input)="validateConfirmPassword()">
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              [(ngModel)]="signupData.confirmPassword"
+              (input)="validateConfirmPassword()"
+            />
 
             <small class="error" *ngIf="confirmPasswordError">
-                {{ confirmPasswordError }}
+              {{ confirmPasswordError }}
             </small>
+          </div>
         </div>
-    </div>
 
-    <!-- Role -->
+        <!-- Role -->
 
-    <p class="role-title">Select Role</p>
+        <p class="role-title">Select Role</p>
 
-    <div class="role-box">
-
-        <label>
-            <input
-                type="radio"
-                name="role"
-                value="student"
-                [(ngModel)]="signupData.role">
+        <div class="role-box">
+          <label>
+            <input type="radio" name="role" value="student" [(ngModel)]="signupData.role" />
             Student
-        </label>
+          </label>
 
-        <label>
-            <input
-                type="radio"
-                name="role"
-                value="manager"
-                [(ngModel)]="signupData.role">
+          <label>
+            <input type="radio" name="role" value="manager" [(ngModel)]="signupData.role" />
             Manager
-        </label>
-
-    </div>
-
-    <!-- Signup Button -->
-
-    <button
-        type="submit"
-        class="signup-btn">
-
-        Sign Up
-
-    </button>
-
-    <div class="form-message error" *ngIf="registerError">
-      {{ registerError }}
-    </div>
-
-    <div class="form-message success" *ngIf="registerMessage">
-      {{ registerMessage }}
-    </div>
-
-    <!-- Divider -->
-
-    <div class="divider">
-        <span>OR</span>
-    </div>
-
-    <!-- Google -->
-
-    <button
-        type="button"
-        class="google-btn">
-
-        Continue with Google
-
-    </button>
-
-    <!-- Login -->
-
-    <div class="login-link">
-
-        Already have an account?
-
-        <a routerLink="/login">
-
-            Login
-
-        </a>
-
-    </div>
-
-</form>
-
+          </label>
         </div>
 
-    </div>
+        <!-- Signup Button -->
 
-    <!-- RIGHT SIDE IMAGE -->
+        <button type="submit" class="signup-btn">Sign Up</button>
 
-    <div class="right-panel">
-
-        <div class="image-content">
-
-            <h1>MESS NOVA</h1>
-
-            <p>
-
-                Smart Mess Management System
-
-                <br>
-
-                for Students, Managers
-
-                <br>
-
-                and Administrators.
-
-            </p>
-
+        <div class="form-message error" *ngIf="registerError">
+          {{ registerError }}
         </div>
 
-    </div>
+        <div class="form-message success" *ngIf="registerMessage">
+          {{ registerMessage }}
+        </div>
 
+        <!-- Divider -->
+
+        <div class="divider">
+          <span>OR</span>
+        </div>
+
+        <!-- Google -->
+
+        <button type="button" class="google-btn">Continue with Google</button>
+
+        <!-- Login -->
+
+        <div class="login-link">
+          Already have an account?
+
+          <a routerLink="/login"> Login </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- RIGHT SIDE IMAGE -->
+
+  <div class="right-panel">
+    <div class="image-content">
+      <h1>MESS NOVA</h1>
+
+      <p>
+        Smart Mess Management System
+
+        <br />
+
+        for Students, Managers
+
+        <br />
+
+        and Administrators.
+      </p>
+    </div>
+  </div>
 </div>
