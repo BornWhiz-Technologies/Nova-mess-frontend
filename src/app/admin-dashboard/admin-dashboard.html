@@ -1,1 +1,109 @@
-<p>admin-dashboard works!</p>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+<div class="admin-dashboard">
+
+  <!-- ===== DASHBOARD HOME ===== -->
+  <ng-container *ngIf="activeSection === 'dashboard'">
+    <div class="welcome-header">
+      <h1>Welcome, {{ adminName }}</h1>
+      <p>Admin Dashboard Overview</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon managers"><span class="material-icons">badge</span></div>
+        <div class="stat-details">
+          <h2>{{ stats.totalManagers }}</h2>
+          <p>Total Managers</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon students"><span class="material-icons">people</span></div>
+        <div class="stat-details">
+          <h2>{{ stats.totalStudents }}</h2>
+          <p>Total Students</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon orders"><span class="material-icons">shopping_cart</span></div>
+        <div class="stat-details">
+          <h2>{{ stats.activeOrders }}</h2>
+          <p>Active Orders</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon revenue"><span class="material-icons">indian_rupee</span></div>
+        <div class="stat-details">
+          <h2>&#8377; {{ stats.revenue }}</h2>
+          <p>Total Revenue</p>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- ===== MANAGERS ===== -->
+  <ng-container *ngIf="activeSection === 'managers'">
+    <h2 class="section-heading"><span class="material-icons">badge</span> Managers</h2>
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Employee ID</th><th>Shift</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let m of managers">
+            <td>{{ m.name }}</td>
+            <td>{{ m.employeeId }}</td>
+            <td>{{ m.shift }}</td>
+            <td>
+              <span class="status-badge" [class.active]="m.status === 'Active'" [class.inactive]="m.status === 'Inactive'">
+                {{ m.status }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="empty-state" *ngIf="managers.length === 0"><p>No managers found.</p></div>
+    </div>
+  </ng-container>
+
+  <!-- ===== STUDENTS ===== -->
+  <ng-container *ngIf="activeSection === 'students'">
+    <h2 class="section-heading"><span class="material-icons">people</span> Students</h2>
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Reg No</th><th>Department</th><th>Year</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of students">
+            <td>{{ s.name }}</td>
+            <td>{{ s.regNo }}</td>
+            <td>{{ s.department }}</td>
+            <td>{{ s.year }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="empty-state" *ngIf="students.length === 0"><p>No students found.</p></div>
+    </div>
+  </ng-container>
+
+  <!-- ===== REPORTS ===== -->
+  <ng-container *ngIf="activeSection === 'reports'">
+    <h2 class="section-heading"><span class="material-icons">assessment</span> Reports</h2>
+    <div class="reports-list">
+      <div class="report-card" *ngFor="let r of reports">
+        <div class="report-header">
+          <h3>{{ r.title }}</h3>
+          <span class="report-type-badge" [class.complaint]="r.type === 'complaint'" [class.feedback]="r.type === 'feedback'">
+            {{ r.type | titlecase }}
+          </span>
+        </div>
+        <p class="report-date">{{ r.date }}</p>
+        <span class="status-badge" [class.pending]="r.status === 'Pending'" [class.resolved]="r.status === 'Resolved'">
+          {{ r.status }}
+        </span>
+      </div>
+      <div class="empty-state" *ngIf="reports.length === 0"><p>No reports found.</p></div>
+    </div>
+  </ng-container>
+
+</div>

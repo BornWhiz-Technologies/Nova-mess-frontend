@@ -1,38 +1,56 @@
-<link
-  href="https://fonts.googleapis.com/icon?family=Material+Icons"
-  rel="stylesheet"
-/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
 <header class="navbar">
   <div class="nav-left">
-    <button class="menu-btn" (click)="toggleSidebar()">
+    <button class="menu-btn" (click)="toggleSidebar($event)">
       <span class="material-icons">menu</span>
     </button>
-
     <h2 class="logo">MESS <span>NOVA</span></h2>
   </div>
 
-  <!-- Home page / Login -->
   <div class="nav-right" *ngIf="showAuthButtons">
     <button class="login-btn" routerLink="/login">Login</button>
     <button class="signup-btn" routerLink="/signup">Sign Up</button>
   </div>
+
+  <div class="nav-right" *ngIf="showUserRole">
+    <span class="role-badge">{{ role | titlecase }}</span>
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </div>
 </header>
 
 <div class="sidebar" [class.active]="isSidebarOpen">
-  <a routerLink="/" class="nav-link" (click)="closeSidebar()">
-    <span class="material-icons">home</span>
-    Home
-  </a>
+  <div class="sidebar-header" *ngIf="isLoggedIn">
+    <span class="material-icons sidebar-logo">restaurant</span>
+    <h3>{{ role | titlecase }} Panel</h3>
+  </div>
 
-  <a routerLink="/about" class="nav-link" (click)="closeSidebar()">
-    <span class="material-icons">info</span>
-    About
-  </a>
+  <nav class="sidebar-nav">
+    <a
+      *ngFor="let item of currentMenuItems"
+      class="nav-link"
+      [routerLink]="
+        role === 'manager'
+          ? '/manager-dashboard'
+          : role === 'student'
+            ? '/student-dashboard'
+            : '/admin-dashboard'
+      "
+      [queryParams]="{ section: item.section }"
+      [class.active]="activeSection === item.section"
+      (click)="isSidebarOpen = false"
+    >
+      <span class="material-icons">{{ item.icon }}</span>
+      {{ item.label }}
+    </a>
+  </nav>
 
-  <a routerLink="/contact" class="nav-link" (click)="closeSidebar()">
-    <span class="material-icons">mail</span>
-    Contact
-  </a>
+  <div class="sidebar-footer" *ngIf="isLoggedIn">
+    <button class="logout-sidebar-btn" (click)="logout()">
+      <span class="material-icons">logout</span>
+      Logout
+    </button>
+  </div>
 </div>
 
-<div *ngIf="isSidebarOpen" class="overlay" (click)="closeSidebar()"></div>
+<div *ngIf="isSidebarOpen" class="overlay" (click)="onOverlayClick()"></div>

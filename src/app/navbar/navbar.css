@@ -99,6 +99,34 @@
   border-color: #f4df9e;
 }
 
+.role-badge {
+  padding: 6px 16px;
+  border-radius: 20px;
+  background: #d4a73a;
+  color: #07170f;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.logout-btn {
+  padding: 10px 20px;
+  border-radius: 3px;
+  border: 1px solid #e74c3c;
+  background: transparent;
+  color: #e74c3c;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.logout-btn:hover {
+  background: #e74c3c;
+  color: white;
+}
+
 .sidebar {
   position: fixed;
   z-index: 999;
@@ -111,33 +139,100 @@
   background: #07170f;
   box-shadow: 5px 0 22px rgba(0, 0, 0, 0.35);
   transition: left 0.35s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar.active {
   left: 0;
 }
 
-.sidebar .nav-link {
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px 18px;
+  border-bottom: 1px solid #1a3a2a;
+  margin-bottom: 12px;
+}
+
+.sidebar-logo {
+  color: #d4a73a;
+  font-size: 28px;
+}
+
+.sidebar-header h3 {
+  color: #f8f2e4;
+  font-size: 17px;
+  margin: 0;
+}
+
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.nav-link {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-bottom: 8px;
-  padding: 15px;
+  margin-bottom: 4px;
+  padding: 14px 16px;
   border-left: 3px solid transparent;
   color: #f8f2e4;
-  font-size: 16px;
+  font-size: 15px;
   text-decoration: none;
+  border-radius: 0 6px 6px 0;
   transition: 0.3s;
 }
 
-.sidebar .nav-link .material-icons {
+.nav-link .material-icons {
   color: #d4a73a;
+  font-size: 22px;
 }
 
-.sidebar .nav-link:hover {
+.nav-link:hover {
   border-left-color: #d4a73a;
   background: #244c38;
   color: #f4df9e;
+}
+
+.nav-link.active {
+  border-left-color: #d4a73a;
+  background: #244c38;
+  color: #f4df9e;
+}
+
+.sidebar-footer {
+  padding-top: 14px;
+  border-top: 1px solid #1a3a2a;
+  margin-top: 12px;
+}
+
+.logout-sidebar-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 16px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #e74c3c;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.logout-sidebar-btn .material-icons {
+  color: #e74c3c;
+  font-size: 22px;
+}
+
+.logout-sidebar-btn:hover {
+  background: rgba(231, 76, 60, 0.15);
 }
 
 .overlay {

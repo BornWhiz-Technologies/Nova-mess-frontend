@@ -1,16 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { SectionService } from '../services/section.service';
 
 @Component({
   selector: 'app-student-dashboard',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './student-dashboard.html',
-  styleUrl: './student-dashboard.css',
+  styleUrls: ['./student-dashboard.css'],
 })
-export class StudentDashboard {
-  constructor(private router: Router) {}
+export class StudentDashboard implements OnInit {
+  activeSection = 'dashboard';
 
   studentName = 'Guna Priya';
   department = 'Information Technology';
@@ -28,6 +28,7 @@ export class StudentDashboard {
     description: 'Today Special Lunch',
     image: 'assets/food.png',
   };
+
   announcements = [
     'Tomorrow Breakfast starts at 7:00 AM.',
     'Friday Special Meals Available.',
@@ -35,41 +36,29 @@ export class StudentDashboard {
   ];
 
   recentOrders = [
-    {
-      foodName: 'Veg Meals',
-      date: 'Today',
-      status: 'Delivered',
-    },
-
-    {
-      foodName: 'Lemon Rice',
-      date: 'Yesterday',
-      status: 'Delivered',
-    },
-
-    {
-      foodName: 'Chicken Biryani',
-      date: '2 Days Ago',
-      status: 'Cancelled',
-    },
+    { foodName: 'Veg Meals', date: 'Today', status: 'Delivered' },
+    { foodName: 'Lemon Rice', date: 'Yesterday', status: 'Delivered' },
+    { foodName: 'Chicken Biryani', date: '2 Days Ago', status: 'Cancelled' },
   ];
 
-  goHome() {
-    this.router.navigate(['/student-dashboard']);
-  }
+  menuItems = [
+    { mealType: 'Breakfast', items: 'Idly, Sambar, Chutney', time: '7:30 AM - 9:00 AM' },
+    { mealType: 'Lunch', items: 'Rice, Sambar, Kootu, Rasam', time: '12:00 PM - 2:00 PM' },
+    { mealType: 'Dinner', items: 'Chapati, Paneer Curry, Rice', time: '7:00 PM - 9:00 PM' },
+  ];
 
-  goMenu() {
-    this.router.navigate(['/student-menu']);
-     alert('Menu Page Coming Soon');
-  }
+  orderHistory = [
+    { foodName: 'Veg Meals', date: '2026-07-20', amount: 70, status: 'Delivered' },
+    { foodName: 'Lemon Rice', date: '2026-07-19', amount: 50, status: 'Delivered' },
+    { foodName: 'Chicken Biryani', date: '2026-07-18', amount: 120, status: 'Cancelled' },
+    { foodName: 'Meals', date: '2026-07-17', amount: 70, status: 'Delivered' },
+  ];
 
-  goOrders() {
-    this.router.navigate(['/student-orders']);
-     alert('Orders Page Coming Soon');
-  }
+  constructor(private sectionService: SectionService) {}
 
-  goProfile() {
-    this.router.navigate(['/student-profile']);
-     alert('Profile Page Coming Soon');
+  ngOnInit() {
+    this.sectionService.activeSection$.subscribe((section) => {
+      this.activeSection = section;
+    });
   }
 }

@@ -1,0 +1,231 @@
+.admin-dashboard {
+  min-height: 100vh;
+  padding: 30px;
+  padding-top: 112px;
+  background: #06251b;
+  color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+}
+
+.welcome-header {
+  margin-bottom: 30px;
+}
+
+.welcome-header h1 {
+  color: #f6dfa0;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.welcome-header p {
+  color: #d9d9d9;
+  font-size: 16px;
+  margin-top: 6px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 22px;
+  margin-bottom: 35px;
+}
+
+.stat-card {
+  background: #f6dfa0;
+  border-radius: 18px;
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  transition: 0.3s;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+}
+
+.stat-card:hover {
+  transform: translateY(-6px);
+}
+
+.stat-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.stat-icon .material-icons {
+  font-size: 30px;
+  color: white;
+}
+
+.managers { background: #0e6b50; }
+.students { background: #2980b9; }
+.orders { background: #f39c12; }
+.revenue { background: #d4a017; }
+
+.stat-details h2 {
+  color: #06251b;
+  font-size: 30px;
+  margin-bottom: 4px;
+}
+
+.stat-details p {
+  color: #555;
+  font-size: 14px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #f6dfa0;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.section-heading .material-icons {
+  color: #d4a73a;
+  font-size: 30px;
+}
+
+.table-card {
+  background: #0e3b2d;
+  border: 1px solid #1a4d3a;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.table-card table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-card thead {
+  background: #0a2e22;
+}
+
+.table-card th {
+  padding: 16px 20px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: #f3c13a;
+  border-bottom: 1px solid #1a4d3a;
+}
+
+.table-card td {
+  padding: 16px 20px;
+  font-size: 14px;
+  color: #d9d9d9;
+  border-bottom: 1px solid #1a4d3a;
+}
+
+.table-card tbody tr:hover {
+  background: #0a2e22;
+}
+
+.table-card tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.status-badge {
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-badge.active {
+  background: #0d3d2e;
+  color: #2ecc71;
+}
+
+.status-badge.inactive {
+  background: #4a1520;
+  color: #ff6b6b;
+}
+
+.status-badge.pending {
+  background: #4a3500;
+  color: #f39c12;
+}
+
+.status-badge.resolved {
+  background: #0d3d2e;
+  color: #2ecc71;
+}
+
+.reports-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.report-card {
+  background: #0e3b2d;
+  border: 1px solid #1a4d3a;
+  border-radius: 14px;
+  padding: 22px;
+}
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.report-header h3 {
+  color: #f6dfa0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.report-type-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.report-type-badge.complaint {
+  background: #4a1520;
+  color: #ff6b6b;
+}
+
+.report-type-badge.feedback {
+  background: #0d3d2e;
+  color: #2ecc71;
+}
+
+.report-date {
+  color: #888;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px;
+  color: #888;
+}
+
+@media (max-width: 768px) {
+  .admin-dashboard {
+    padding: 20px;
+    padding-top: 92px;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

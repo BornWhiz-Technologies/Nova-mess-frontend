@@ -9,7 +9,6 @@ import { AdminDashboard } from './admin-dashboard/admin-dashboard';
 import { ManagerDashboard } from './manager-dashboard/manager-dashboard';
 import { StudentDashboard } from './student-dashboard/student-dashboard';
 import { Studentdetails } from './studentdetails/studentdetails';
-// About already imported above; removed duplicate import
 
 export const routes: Routes = [
   { path: '', component: Home },
@@ -22,11 +21,4 @@ export const routes: Routes = [
   { path: 'student-dashboard', component: StudentDashboard },
   { path: 'admin-dashboard', component: AdminDashboard },
   { path: 'manager-dashboard', component: ManagerDashboard },
-  { path: 'about-ui', component: About }
 ];
-   
-
-
-
-
-
