@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Manager } from '../services/manager';
+import { ManagerService } from '../services/manager';
 
 @Component({
   selector: 'app-manager-details',
@@ -12,7 +12,7 @@ import { Manager } from '../services/manager';
 })
 export class ManagerDetails {
   constructor(
-    private managerService: Manager,
+    private managerService: ManagerService,
     private router: Router,
   ) {}
 
@@ -41,13 +41,10 @@ export class ManagerDetails {
 
   limitExperience(event: any) {
     let value = event.target.value;
-
     value = value.replace(/[^0-9]/g, '');
-
     if (value.length > 2) {
       value = value.slice(0, 2);
     }
-
     event.target.value = value;
     this.managerData.experience = value ? Number(value) : 0;
   }
@@ -80,26 +77,15 @@ export class ManagerDetails {
       formData.append('employeeIdProof', this.employeeIdProof);
     }
 
-    console.log('===== FormData =====');
-
-    for (const pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
-
     this.managerService.saveManagerDetails(formData).subscribe({
-      next: (response) => {
+      next: (response: any) => {
         console.log('API Success :', response);
-
         alert(response.message);
-
         this.router.navigate(['/manager-dashboard']);
       },
-
-      error: (error) => {
+      error: (error: any) => {
         console.error('API Error :', error);
-
         console.log('Backend Response :', error.error);
-
         alert(error.error.message);
       },
     });

@@ -1,177 +1,101 @@
-<link
-  href="https://fonts.googleapis.com/icon?family=Material+Icons"
-  rel="stylesheet"
-/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 <div class="dashboard-container">
-  <!-- Header -->
-  <div class="header">
-    <div class="welcome">
-      <h2>
-        <span class="material-icons">waving_hand</span>
-        Hi, {{ studentName }}
-      </h2>
 
-      <p>
-        <span class="material-icons small-icon">wb_sunny</span>
-        Good Morning
-      </p>
-    </div>
-
-    <div class="header-icons">
-      <span class="material-icons notification">notifications</span>
-      <span class="material-icons profile">account_circle</span>
-    </div>
-  </div>
-
-  <!-- Student Card -->
-  <div class="student-card">
-    <div class="student-info">
-      <h3>{{ studentName }}</h3>
-      <p>{{ department }}</p>
-      <p>{{ year }} • Section {{ section }}</p>
-    </div>
-  </div>
-
-  <!-- Today's Menu -->
-  <div class="card">
-    <div class="card-title">
-      <span class="material-icons">restaurant</span>
-      Today's Menu
-    </div>
-
-    <div class="menu-item">
-      <div>
-        <h4>{{ todayMenu.foodName }}</h4>
-        <p>₹ {{ todayMenu.price }}</p>
+  <!-- ===== DASHBOARD HOME ===== -->
+  <ng-container *ngIf="activeSection === 'dashboard'">
+    <div class="header">
+      <div class="welcome">
+        <h2><span class="material-icons">waving_hand</span> Hi, {{ studentName }}</h2>
+        <p><span class="material-icons small-icon">wb_sunny</span> Good Morning</p>
       </div>
-
-      <button>Order</button>
-    </div>
-  </div>
-
-  <!-- Today's Special -->
-  <div class="card">
-    <div class="card-title">
-      <span class="material-icons">star</span>
-      Today's Special
-    </div>
-
-    <div class="special-food">
-      <img [src]="todaySpecial.image" alt="food" />
-
-      <div>
-        <h4>{{ todaySpecial.foodName }}</h4>
-        <p>{{ todaySpecial.description }}</p>
+      <div class="header-icons">
+        <span class="material-icons notification">notifications</span>
+        <span class="material-icons profile">account_circle</span>
       </div>
     </div>
-  </div>
 
-  <!-- Remaining Quantity -->
-  <div class="card">
-    <div class="card-title">
-      <span class="material-icons">inventory_2</span>
-      Remaining Quantity
-    </div>
-
-    <div class="quantity">
-      <h2>{{ todayMenu.available }}</h2>
-      <p>Meals Available</p>
-    </div>
-  </div>
-
-  <!-- Meal Timing -->
-  <div class="card">
-    <div class="card-title">
-      <span class="material-icons">schedule</span>
-      Meal Timing
-    </div>
-
-    <div class="timing">
-      <div>
-        <span>
-          <span class="material-icons">free_breakfast</span>
-          Breakfast
-        </span>
-        <span>7:30 AM - 9:00 AM</span>
-      </div>
-
-      <div>
-        <span>
-          <span class="material-icons">lunch_dining</span>
-          Lunch
-        </span>
-        <span>12:00 PM - 2:00 PM</span>
-      </div>
-
-      <div>
-        <span>
-          <span class="material-icons">dinner_dining</span>
-          Dinner
-        </span>
-        <span>7:00 PM - 9:00 PM</span>
+    <div class="student-card">
+      <div class="student-info">
+        <h3>{{ studentName }}</h3>
+        <p>{{ department }}</p>
+        <p>{{ year }} &bull; Section {{ section }}</p>
       </div>
     </div>
-  </div>
 
-  <!-- Announcement -->
-  <div class="card">
-    <div class="card-title">
-      <span class="material-icons">campaign</span>
-      Announcement
-    </div>
-
-    <ul>
-      <li *ngFor="let item of announcements">{{ item }}</li>
-    </ul>
-  </div>
-
-  <!-- Weekly Order -->
-  <div class="card">
-    <div class="card-title">
-      <span class="material-icons">show_chart</span>
-      Weekly Orders
-    </div>
-
-    <div class="graph-box">Weekly Graph Here</div>
-  </div>
-
-  <!-- Recent Orders -->
-  <div class="card">
-    <div class="card-title">
-      <span class="material-icons">receipt_long</span>
-      Recent Orders
-    </div>
-
-    <div class="recent-order" *ngFor="let order of recentOrders">
-      <div>
-        <h4>{{ order.foodName }}</h4>
-        <small>{{ order.date }}</small>
+    <div class="card">
+      <div class="card-title"><span class="material-icons">restaurant</span> Today's Menu</div>
+      <div class="menu-item">
+        <div>
+          <h4>{{ todayMenu.foodName }}</h4>
+          <p>&#8377; {{ todayMenu.price }}</p>
+        </div>
       </div>
-
-      <span class="status">{{ order.status }}</span>
     </div>
-  </div>
-</div>
 
-<!-- Bottom Navigation -->
-<div class="bottom-nav">
-  <div class="nav-item active" (click)="goHome()">
-    <span class="material-icons">home</span>
-    <small>Home</small>
-  </div>
+    <div class="card">
+      <div class="card-title"><span class="material-icons">star</span> Today's Special</div>
+      <div class="special-food">
+        <img [src]="todaySpecial.image" alt="food" />
+        <div>
+          <h4>{{ todaySpecial.foodName }}</h4>
+          <p>{{ todaySpecial.description }}</p>
+        </div>
+      </div>
+    </div>
 
-  <div class="nav-item" (click)="goMenu()">
-    <span class="material-icons">restaurant_menu</span>
-    <small>Menu</small>
-  </div>
+    <div class="card">
+      <div class="card-title"><span class="material-icons">campaign</span> Announcements</div>
+      <ul><li *ngFor="let item of announcements">{{ item }}</li></ul>
+    </div>
+  </ng-container>
 
-  <div class="nav-item" (click)="goOrders()">
-    <span class="material-icons">shopping_bag</span>
-    <small>Orders</small>
-  </div>
+  <!-- ===== MENU ===== -->
+  <ng-container *ngIf="activeSection === 'menu'">
+    <h2 class="section-heading"><span class="material-icons">restaurant_menu</span> Menu</h2>
+    <div class="menu-grid">
+      <div class="menu-card" *ngFor="let m of menuItems">
+        <h3>{{ m.mealType }}</h3>
+        <p class="menu-items-text">{{ m.items }}</p>
+        <span class="menu-time-badge">{{ m.time }}</span>
+      </div>
+    </div>
+  </ng-container>
 
-  <div class="nav-item" (click)="goProfile()">
-    <span class="material-icons">person</span>
-    <small>Profile</small>
-  </div>
+  <!-- ===== ORDERS ===== -->
+  <ng-container *ngIf="activeSection === 'orders'">
+    <h2 class="section-heading"><span class="material-icons">shopping_cart</span> My Orders</h2>
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr><th>Food</th><th>Date</th><th>Amount</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let o of orderHistory">
+            <td>{{ o.foodName }}</td>
+            <td>{{ o.date }}</td>
+            <td>&#8377; {{ o.amount }}</td>
+            <td>
+              <span class="status-badge" [class.delivered]="o.status === 'Delivered'" [class.cancelled]="o.status === 'Cancelled'">
+                {{ o.status }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="empty-state" *ngIf="orderHistory.length === 0"><p>No orders found.</p></div>
+    </div>
+  </ng-container>
+
+  <!-- ===== PROFILE ===== -->
+  <ng-container *ngIf="activeSection === 'profile'">
+    <h2 class="section-heading"><span class="material-icons">person</span> Profile</h2>
+    <div class="profile-card">
+      <div class="profile-avatar"><span class="material-icons">account_circle</span></div>
+      <div class="info-row"><label>Full Name</label><p>{{ studentName }}</p></div>
+      <div class="info-row"><label>Department</label><p>{{ department }}</p></div>
+      <div class="info-row"><label>Year</label><p>{{ year }}</p></div>
+      <div class="info-row"><label>Section</label><p>{{ section }}</p></div>
+    </div>
+  </ng-container>
+
 </div>

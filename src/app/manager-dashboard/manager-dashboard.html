@@ -1,218 +1,457 @@
-<div class="dashboard">
-
-    <!-- Sidebar -->
-
-    <aside class="sidebar">
-
-        <div class="logo">
-
-            <h2>🍽️ Mess Nova</h2>
-
-            <p>Manager Panel</p>
-
+<div class="manager-dashboard">
+  <div class="dashboard-content">
+    <!-- ===== DASHBOARD HOME ===== -->
+    <ng-container *ngIf="activeSection === 'dashboard'">
+      <div class="dashboard-header">
+        <div class="welcome-section">
+          <h1>Welcome Back 👋</h1>
+          <p>
+            Good {{ greeting }}, <span>{{ manager.fullName }}</span>
+          </p>
         </div>
-
-        <ul class="menu">
-
-            <li class="active">
-                <span>🏠</span>
-                Dashboard
-            </li>
-
-            <li>
-                <span>👨‍🎓</span>
-                Students
-            </li>
-
-            <li>
-                <span>🍽️</span>
-                Menu
-            </li>
-
-            <li>
-                <span>📅</span>
-                Attendance
-            </li>
-
-            <li>
-                <span>📦</span>
-                Inventory
-            </li>
-
-            <li>
-                <span>💬</span>
-                Complaints
-            </li>
-
-            <li>
-                <span>📊</span>
-                Reports
-            </li>
-
-            <li>
-                <span>👤</span>
-                Profile
-            </li>
-
-            <li class="logout">
-                <span>🚪</span>
-                Logout
-            </li>
-
-        </ul>
-
-    </aside>
-
-    <!-- Main Content -->
-
-    <main class="content">
-
-        <!-- Navbar -->
-
-        <header class="navbar">
-
-            <div>
-
-                <h1>Welcome Back 👋</h1>
-
-                <p>Manage your mess with confidence.</p>
-
-            </div>
-
-            <div class="profile">
-
-                <div class="notification">
-
-                    🔔
-
-                </div>
-
-                <div class="avatar">
-
-                    👨‍💼
-
-                </div>
-
-            </div>
-
-        </header>
-
-        <!-- Statistics Cards -->
-
-        <section class="cards">
-
-            <div class="card" *ngFor="let item of stats">
-
-                <div class="icon">
-
-                    {{item.icon}}
-
-                </div>
-
-                <div>
-
-                    <h2>{{item.value}}</h2>
-
-                    <p>{{item.title}}</p>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- Two Column -->
-
-        <section class="grid">
-
-            <!-- Today's Menu -->
-
-            <div class="panel">
-
-                <h2>🍽️ Today's Menu</h2>
-
-                <div class="menu-list" *ngFor="let menu of todaysMenu">
-
-                    <div>
-
-                        <h4>{{menu.meal}}</h4>
-
-                        <p>{{menu.items}}</p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- Weekly Progress -->
-
-            <div class="panel">
-
-                <h2>📈 Weekly Meals</h2>
-
-                <div class="chart">
-
-                    <div class="bar mon">
-
-                        <span>Mon</span>
-
-                    </div>
-
-                    <div class="bar tue">
-
-                        <span>Tue</span>
-
-                    </div>
-
-                    <div class="bar wed">
-
-                        <span>Wed</span>
-
-                    </div>
-
-                    <div class="bar thu">
-
-                        <span>Thu</span>
-
-                    </div>
-
-                    <div class="bar fri">
-
-                        <span>Fri</span>
-
-                    </div>
-
-                    <div class="bar sat">
-
-                        <span>Sat</span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- Recent Activities -->
-
-        <section class="panel activity">
-
-            <h2>📋 Recent Activities</h2>
-
-            <ul>
-
-                <li *ngFor="let activity of recentActivities">
-
-                    ✅ {{activity}}
-
-                </li>
-
-            </ul>
-
-        </section>
-
-    </main>
-
+        <div class="notification-section">
+          <button class="notification-btn">
+            <i class="fa-solid fa-bell"></i>
+            <span class="notification-badge" *ngIf="notificationCount > 0">{{
+              notificationCount
+            }}</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon orders"><i class="fa-solid fa-bag-shopping"></i></div>
+          <div class="stat-details">
+            <h2>{{ dashboard.todayOrders }}</h2>
+            <p>Today's Orders</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon pending"><i class="fa-solid fa-clock"></i></div>
+          <div class="stat-details">
+            <h2>{{ dashboard.pendingOrders }}</h2>
+            <p>Pending Orders</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon completed"><i class="fa-solid fa-circle-check"></i></div>
+          <div class="stat-details">
+            <h2>{{ dashboard.completedOrders }}</h2>
+            <p>Completed Orders</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon revenue"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+          <div class="stat-details">
+            <h2>₹ {{ dashboard.todayRevenue }}</h2>
+            <p>Today's Revenue</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="quick-actions">
+        <button (click)="goToSection('menu')"><i class="fa-solid fa-plus"></i> Add Menu</button>
+        <button (click)="goToSection('orders')">
+          <i class="fa-solid fa-list-check"></i> View Orders
+        </button>
+        <button (click)="goToSection('analytics')">
+          <i class="fa-solid fa-chart-line"></i> Analytics
+        </button>
+      </div>
+    </ng-container>
+
+    <!-- ===== MENU MANAGEMENT ===== -->
+    <ng-container *ngIf="activeSection === 'menu'">
+      <div class="section-header">
+        <h1>Menu Management</h1>
+        <button class="btn-primary" (click)="showAddMenu = true">
+          <i class="fa-solid fa-plus"></i> Add Menu
+        </button>
+      </div>
+
+      <div class="tabs">
+        <button [class.active]="menuTab === 'today'" (click)="menuTab = 'today'; loadTodaysMenu()">
+          Today's Menu
+        </button>
+        <button
+          [class.active]="menuTab === 'weekly'"
+          (click)="menuTab = 'weekly'; loadWeeklyMenu()"
+        >
+          Weekly Menu
+        </button>
+      </div>
+
+      <div class="menu-grid">
+        <div class="menu-card" *ngFor="let item of menuTab === 'today' ? todaysMenu : weeklyMenu">
+          <div class="menu-card-header">
+            <h3>{{ item.mealType }} - {{ item.category }}</h3>
+            <span class="menu-time">₹ {{ item.price }}</span>
+          </div>
+          <p class="menu-items">{{ item.foodName }}</p>
+          <div class="menu-card-actions">
+            <button class="btn-edit" (click)="editMenu(item)">
+              <i class="fa-solid fa-pen"></i> Edit
+            </button>
+            <button class="btn-delete" (click)="deleteMenu(item._id)">
+              <i class="fa-solid fa-trash"></i> Delete
+            </button>
+          </div>
+        </div>
+        <div
+          class="empty-state"
+          *ngIf="(menuTab === 'today' ? todaysMenu : weeklyMenu).length === 0"
+        >
+          <p>No menu available.</p>
+        </div>
+      </div>
+
+      <!-- Add/Edit Menu Form -->
+      <div class="modal-overlay" *ngIf="showAddMenu || editingMenu" (click)="closeMenuForm()">
+        <div class="modal" (click)="$event.stopPropagation()">
+          <h2>{{ editingMenu ? 'Edit Menu' : 'Add Menu' }}</h2>
+          <div class="form-group">
+            <label>Food Name</label>
+            <input type="text" [(ngModel)]="menuData.foodName" placeholder="Enter food name" />
+          </div>
+
+          <div class="form-group">
+            <label>Category</label>
+            <select [(ngModel)]="menuData.category">
+              <option value="">Select Category</option>
+              <option value="Veg">Veg</option>
+              <option value="Non Veg">Non Veg</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Meal Type</label>
+            <select [(ngModel)]="menuData.mealType">
+              <option value="">Select Meal Type</option>
+              <option value="Breakfast">Breakfast</option>
+              <option value="Lunch">Lunch</option>
+              <option value="Dinner">Dinner</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Description</label>
+            <textarea rows="3" [(ngModel)]="menuData.description" placeholder="Enter description">
+            </textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Price</label>
+            <input type="number" [(ngModel)]="menuData.price" placeholder="Enter price" />
+          </div>
+
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" [(ngModel)]="menuData.date" />
+          </div>
+          <div class="form-actions">
+            <button class="btn-cancel" (click)="closeMenuForm()">Cancel</button>
+            <button class="btn-submit" (click)="saveMenu()">
+              {{ editingMenu ? 'Update' : 'Add' }} Menu
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- ===== ORDERS ===== -->
+    <ng-container *ngIf="activeSection === 'orders'">
+      <div class="section-header"><h1>Orders</h1></div>
+      <div class="tabs">
+        <button
+          [class.active]="orderTab === 'pending'"
+          (click)="orderTab = 'pending'; loadOrders()"
+        >
+          Pending
+        </button>
+        <button
+          [class.active]="orderTab === 'preparing'"
+          (click)="orderTab = 'preparing'; loadOrders()"
+        >
+          Preparing
+        </button>
+        <button
+          [class.active]="orderTab === 'completed'"
+          (click)="orderTab = 'completed'; loadOrders()"
+        >
+          Completed
+        </button>
+        <button
+          [class.active]="orderTab === 'cancelled'"
+          (click)="orderTab = 'cancelled'; loadOrders()"
+        >
+          Cancelled
+        </button>
+      </div>
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Meal</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let o of orders">
+              <td>{{ o.studentName }}</td>
+              <td>{{o.foodName}}</td>
+              <td>₹ {{o.totalPrice}}</td>
+              <td>{{ o.createdAt | date: 'short' }}</td>
+              <td class="actions">
+                <button
+                  *ngIf="orderTab === 'Pending'"
+                  class="btn-sm btn-preparing"
+                  (click)="updateOrderStatus(o._id, 'preparing')"
+                >
+                  Preparing
+                </button>
+                <button
+                  *ngIf="orderTab === 'Preparing'"
+                  class="btn-sm btn-served"
+                  (click)="updateOrderStatus(o._id, 'served')"
+                >
+                  Served
+                </button>
+                <button
+                  *ngIf="orderTab !== 'cancelled' && orderTab !== 'completed'"
+                  class="btn-sm btn-cancel-order"
+                  (click)="updateOrderStatus(o._id, 'cancelled')"
+                >
+                  Cancel
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="empty-state" *ngIf="orders.length === 0">
+          <p>No {{ orderTab }} orders.</p>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- ===== STUDENTS ===== -->
+    <ng-container *ngIf="activeSection === 'students'">
+      <div class="section-header"><h1>Students</h1></div>
+      <div class="controls">
+        <div class="search-box">
+          <i class="fa-solid fa-search"></i>
+          <input
+            type="text"
+            placeholder="Search students..."
+            [(ngModel)]="searchQuery"
+            (input)="filterStudents()"
+          />
+        </div>
+        <div class="filter-buttons">
+          <button
+            [class.active]="studentFilter === 'all'"
+            (click)="studentFilter = 'all'; filterStudents()"
+          >
+            All
+          </button>
+          <button
+            [class.active]="studentFilter === 'active'"
+            (click)="studentFilter = 'active'; filterStudents()"
+          >
+            Active
+          </button>
+          <button
+            [class.active]="studentFilter === 'inactive'"
+            (click)="studentFilter = 'inactive'; filterStudents()"
+          >
+            Inactive
+          </button>
+        </div>
+      </div>
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Room</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of filteredStudents">
+              <td>{{ s.fullName }}</td>
+              <td>{{ s.email }}</td>
+              <td>{{ s.phone }}</td>
+              <td>{{ s.roomNumber }}</td>
+              <td>
+                <span
+                  class="status-badge"
+                  [class.active]="s.isActive"
+                  [class.inactive]="!s.isActive"
+                  >{{ s.isActive ? 'Active' : 'Inactive' }}</span
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="empty-state" *ngIf="filteredStudents.length === 0">
+          <p>No students found.</p>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- ===== REPORTS ===== -->
+    <ng-container *ngIf="activeSection === 'reports'">
+      <div class="section-header"><h1>Reports</h1></div>
+      <div class="tabs">
+        <button
+          [class.active]="reportTab === 'complaints'"
+          (click)="reportTab = 'complaints'; loadReports()"
+        >
+          Complaints
+        </button>
+        <button
+          [class.active]="reportTab === 'feedback'"
+          (click)="reportTab = 'feedback'; loadReports()"
+        >
+          Feedback
+        </button>
+        <button
+          [class.active]="reportTab === 'resolved'"
+          (click)="reportTab = 'resolved'; loadReports()"
+        >
+          Resolved
+        </button>
+      </div>
+      <div class="reports-list">
+        <div class="report-card" *ngFor="let r of reports">
+          <div class="report-header">
+            <h3>{{ r.title }}</h3>
+            <span class="report-date">{{ r.createdAt | date: 'short' }}</span>
+          </div>
+          <p>{{ r.message }}</p>
+          <p class="report-student">By: {{ r.studentName }}</p>
+          <button
+            *ngIf="reportTab !== 'resolved'"
+            class="btn-sm btn-resolve"
+            (click)="markResolved(r._id)"
+          >
+            Mark Resolved
+          </button>
+        </div>
+        <div class="empty-state" *ngIf="reports.length === 0">
+          <p>No {{ reportTab }} reports.</p>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- ===== ANALYTICS ===== -->
+    <ng-container *ngIf="activeSection === 'analytics'">
+      <div class="section-header"><h1>Analytics</h1></div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon revenue"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+          <div class="stat-details">
+            <h2>₹ {{ analytics.totalRevenue }}</h2>
+            <p>Total Revenue</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orders"><i class="fa-solid fa-bag-shopping"></i></div>
+          <div class="stat-details">
+            <h2>{{ analytics.totalOrders }}</h2>
+            <p>Total Orders</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon pending"><i class="fa-solid fa-utensils"></i></div>
+          <div class="stat-details">
+            <h2>{{ analytics.mostOrderedFood || 'N/A' }}</h2>
+            <p>Most Ordered</p>
+          </div>
+        </div>
+      </div>
+      <div class="weekly-chart-card">
+        <h2>Weekly Overview</h2>
+        <div class="weekly-chart">
+          <div class="chart-bar" *ngFor="let day of analytics.weeklyData">
+            <div class="bar-fill" [style.height.%]="(day.orders / 50) * 100"></div>
+            <span class="bar-label">{{ day.day }}</span>
+            <span class="bar-value">{{ day.orders }}</span>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- ===== NOTIFICATIONS ===== -->
+    <ng-container *ngIf="activeSection === 'notifications'">
+      <div class="section-header"><h1>Notifications</h1></div>
+      <div class="reports-list">
+        <div class="notification-card" *ngFor="let n of notifications" [class.unread]="!n.isRead">
+          <div class="notif-icon"><i class="fa-solid fa-bell"></i></div>
+          <div class="notif-content">
+            <h3>{{ n.title }}</h3>
+            <p>{{ n.message }}</p>
+            <span class="notif-time">{{ n.createdAt | date: 'short' }}</span>
+          </div>
+          <button *ngIf="!n.isRead" class="btn-sm btn-resolve" (click)="markNotifRead(n._id)">
+            Mark Read
+          </button>
+        </div>
+        <div class="empty-state" *ngIf="notifications.length === 0"><p>No notifications.</p></div>
+      </div>
+    </ng-container>
+
+    <!-- ===== PROFILE ===== -->
+    <ng-container *ngIf="activeSection === 'profile'">
+      <div class="section-header"><h1>Profile</h1></div>
+      <div class="profile-card">
+        <div class="profile-avatar"><i class="fa-solid fa-user"></i></div>
+        <div *ngIf="!isEditingProfile">
+          <div class="info-row">
+            <label>Full Name</label>
+            <p>{{ manager.fullName }}</p>
+          </div>
+          <div class="info-row">
+            <label>Employee ID</label>
+            <p>{{ manager.employeeId }}</p>
+          </div>
+          <div class="info-row">
+            <label>Experience</label>
+            <p>{{ manager.experience }} years</p>
+          </div>
+          <div class="info-row">
+            <label>Shift</label>
+            <p>{{ manager.shift }}</p>
+          </div>
+          <button class="btn-submit" (click)="isEditingProfile = true">Edit Profile</button>
+        </div>
+        <div *ngIf="isEditingProfile">
+          <div class="form-group">
+            <label>Full Name</label><input type="text" [(ngModel)]="editProfile.fullName" />
+          </div>
+          <div class="form-group">
+            <label>Phone</label><input type="text" [(ngModel)]="editProfile.phone" />
+          </div>
+          <div class="form-group">
+            <label>Shift</label>
+            <select [(ngModel)]="editProfile.shift">
+              <option value="Morning">Morning</option>
+              <option value="Evening">Evening</option>
+              <option value="Night">Night</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button class="btn-cancel" (click)="isEditingProfile = false">Cancel</button>
+            <button class="btn-submit" (click)="saveProfile()">Save</button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
 </div>
