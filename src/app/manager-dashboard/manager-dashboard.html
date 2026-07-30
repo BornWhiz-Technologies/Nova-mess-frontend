@@ -202,26 +202,26 @@
           <tbody>
             <tr *ngFor="let o of orders">
               <td>{{ o.studentName }}</td>
-              <td>{{o.foodName}}</td>
-              <td>₹ {{o.totalPrice}}</td>
+              <td>{{ o.foodName }}</td>
+              <td>₹ {{ o.totalPrice }}</td>
               <td>{{ o.createdAt | date: 'short' }}</td>
               <td class="actions">
                 <button
-                  *ngIf="orderTab === 'Pending'"
+                  *ngIf="orderTab === 'pending'"
                   class="btn-sm btn-preparing"
                   (click)="updateOrderStatus(o._id, 'preparing')"
                 >
                   Preparing
                 </button>
                 <button
-                  *ngIf="orderTab === 'Preparing'"
+                  *ngIf="orderTab === 'preparing'"
                   class="btn-sm btn-served"
-                  (click)="updateOrderStatus(o._id, 'served')"
+                  (click)="updateOrderStatus(o._id, 'completed')"
                 >
                   Served
                 </button>
                 <button
-                  *ngIf="orderTab !== 'cancelled' && orderTab !== 'completed'"
+                  *ngIf="orderTab === 'pending' || orderTab === 'preparing'"
                   class="btn-sm btn-cancel-order"
                   (click)="updateOrderStatus(o._id, 'cancelled')"
                 >

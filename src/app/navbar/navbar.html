@@ -12,11 +12,6 @@
     <button class="login-btn" routerLink="/login">Login</button>
     <button class="signup-btn" routerLink="/signup">Sign Up</button>
   </div>
-
-  <div class="nav-right" *ngIf="showUserRole">
-    <span class="role-badge">{{ role | titlecase }}</span>
-    <button class="logout-btn" (click)="logout()">Logout</button>
-  </div>
 </header>
 
 <div class="sidebar" [class.active]="isSidebarOpen">
@@ -29,16 +24,10 @@
     <a
       *ngFor="let item of currentMenuItems"
       class="nav-link"
-      [routerLink]="
-        role === 'manager'
-          ? '/manager-dashboard'
-          : role === 'student'
-            ? '/student-dashboard'
-            : '/admin-dashboard'
-      "
-      [queryParams]="{ section: item.section }"
+      [routerLink]="getMenuRoute(item)"
+      [queryParams]="getMenuQueryParams(item)"
       [class.active]="activeSection === item.section"
-      (click)="isSidebarOpen = false"
+      (click)="onMenuClick(item)"
     >
       <span class="material-icons">{{ item.icon }}</span>
       {{ item.label }}

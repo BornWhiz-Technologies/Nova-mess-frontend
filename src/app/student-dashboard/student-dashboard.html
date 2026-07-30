@@ -1,6 +1,5 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 <div class="dashboard-container">
-
   <!-- ===== DASHBOARD HOME ===== -->
   <ng-container *ngIf="activeSection === 'dashboard'">
     <div class="header">
@@ -24,42 +23,101 @@
 
     <div class="card">
       <div class="card-title"><span class="material-icons">restaurant</span> Today's Menu</div>
-      <div class="menu-item">
+      <div class="menu-item" *ngIf="todayMenu; else noMenu">
         <div>
           <h4>{{ todayMenu.foodName }}</h4>
           <p>&#8377; {{ todayMenu.price }}</p>
         </div>
+        <button type="button" (click)="orderNow(todayMenu)">Order Now</button>
       </div>
+      <ng-template #noMenu><p>No menu has been added for today.</p></ng-template>
     </div>
 
     <div class="card">
       <div class="card-title"><span class="material-icons">star</span> Today's Special</div>
-      <div class="special-food">
-        <img [src]="todaySpecial.image" alt="food" />
+      <div class="special-food" *ngIf="todayMenu; else noSpecial">
+        <img
+          [src]="
+            todayMenu.image
+              ? 'http://localhost:5000/uploads/' + todayMenu.image
+              : todaySpecial.image
+          "
+          alt="food"
+        />
         <div>
-          <h4>{{ todaySpecial.foodName }}</h4>
-          <p>{{ todaySpecial.description }}</p>
+          <h4>{{ todayMenu?.foodName }}</h4>
+
+          <p>₹ {{ todayMenu?.price }}</p>
+
+          <p>{{ todayMenu?.mealType }}</p>
+
+          <p>{{ todayMenu?.category }}</p>
         </div>
       </div>
+      <ng-template #noSpecial><p>Today's special will be updated soon.</p></ng-template>
     </div>
 
     <div class="card">
       <div class="card-title"><span class="material-icons">campaign</span> Announcements</div>
-      <ul><li *ngFor="let item of announcements">{{ item }}</li></ul>
+      <ul>
+        <li *ngFor="let item of announcements">{{ item }}</li>
+      </ul>
     </div>
   </ng-container>
 
   <!-- ===== MENU ===== -->
   <ng-container *ngIf="activeSection === 'menu'">
-    <h2 class="section-heading"><span class="material-icons">restaurant_menu</span> Menu</h2>
+    <h2 class="section-heading">
+      <span class="material-icons">restaurant_menu</span>
+      Menu
+    </h2>
+
     <div class="menu-grid">
       <div class="menu-card" *ngFor="let m of menuItems">
-        <h3>{{ m.mealType }}</h3>
-        <p class="menu-items-text">{{ m.items }}</p>
-        <span class="menu-time-badge">{{ m.time }}</span>
+        <img *ngIf="m.image" [src]="'http://localhost:5000/uploads/' + m.image" width="120" />
+
+        <h3>{{ m.foodName }}</h3>
+
+        <p><strong>Category:</strong> {{ m.category }}</p>
+
+        <p><strong>Meal:</strong> {{ m.mealType }}</p>
+
+        <p *ngIf="m.description"><strong>Details:</strong> {{ m.description }}</p>
+
+        <p>₹ {{ m.price }}</p>
+
+        <button class="order-btn" (click)="orderNow(m)">Order Now</button>
+      </div>
+      <div class="empty-state" *ngIf="menuItems.length === 0">No menu is available.</div>
+    </div> </ng-container
+  ><!-- ORDER BOX -->
+
+  <!-- ===== ORDER MODAL ===== -->
+  <div class="modal-overlay" *ngIf="showOrderBox">
+    <div class="order-box">
+      <h2>🍽 Place Order</h2>
+
+      <img [src]="'http://localhost:5000/uploads/' + selectedFood.image" alt="Food" />
+
+      <h3>{{ selectedFood.foodName }}</h3>
+
+      <p class="price">Price : ₹ {{ selectedFood.price }}</p>
+
+      <div class="qty-box">
+        <label>Quantity</label>
+
+        <input type="number" [(ngModel)]="quantity" min="1" />
+      </div>
+
+      <h2 class="total">Total : ₹ {{ selectedFood.price * quantity }}</h2>
+
+      <div class="btn-group">
+        <button class="confirm-btn" (click)="confirmOrder()">Confirm Order</button>
+
+        <button class="cancel-btn" (click)="cancelOrder()">Cancel</button>
       </div>
     </div>
-  </ng-container>
+  </div>
 
   <!-- ===== ORDERS ===== -->
   <ng-container *ngIf="activeSection === 'orders'">
@@ -67,7 +125,12 @@
     <div class="table-card">
       <table>
         <thead>
-          <tr><th>Food</th><th>Date</th><th>Amount</th><th>Status</th></tr>
+          <tr>
+            <th>Food</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+          </tr>
         </thead>
         <tbody>
           <tr *ngFor="let o of orderHistory">
@@ -75,7 +138,11 @@
             <td>{{ o.date }}</td>
             <td>&#8377; {{ o.amount }}</td>
             <td>
-              <span class="status-badge" [class.delivered]="o.status === 'Delivered'" [class.cancelled]="o.status === 'Cancelled'">
+              <span
+                class="status-badge"
+                [class.delivered]="o.status === 'Delivered'"
+                [class.cancelled]="o.status === 'Cancelled'"
+              >
                 {{ o.status }}
               </span>
             </td>
@@ -91,11 +158,22 @@
     <h2 class="section-heading"><span class="material-icons">person</span> Profile</h2>
     <div class="profile-card">
       <div class="profile-avatar"><span class="material-icons">account_circle</span></div>
-      <div class="info-row"><label>Full Name</label><p>{{ studentName }}</p></div>
-      <div class="info-row"><label>Department</label><p>{{ department }}</p></div>
-      <div class="info-row"><label>Year</label><p>{{ year }}</p></div>
-      <div class="info-row"><label>Section</label><p>{{ section }}</p></div>
+      <div class="info-row">
+        <label>Full Name</label>
+        <p>{{ studentName }}</p>
+      </div>
+      <div class="info-row">
+        <label>Department</label>
+        <p>{{ department }}</p>
+      </div>
+      <div class="info-row">
+        <label>Year</label>
+        <p>{{ year }}</p>
+      </div>
+      <div class="info-row">
+        <label>Section</label>
+        <p>{{ section }}</p>
+      </div>
     </div>
   </ng-container>
-
 </div>

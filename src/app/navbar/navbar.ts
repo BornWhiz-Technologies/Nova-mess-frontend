@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs';
-import { SectionService } from '../services/section.service';
+//import { SectionService } from '../services/section.service';
 
 @Component({
   selector: 'app-navbar',
@@ -49,38 +49,41 @@ export class Navbar implements OnInit {
     { label: 'Contact', icon: 'mail', route: '/contact' },
   ];
 
-  constructor(
-    private router: Router,
-    private sectionService: SectionService,
-  ) {}
+  constructor(private router: Router) {}
 
   ngOnInit() {
     this.checkAuth();
 
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => this.checkAuth());
-
-    this.sectionService.activeSection$.subscribe((section) => {
-      this.activeSection = section;
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
+      this.checkAuth();
     });
   }
 
   checkAuth() {
     const token = localStorage.getItem('token');
+
     this.role = localStorage.getItem('role') || '';
+
     const url = this.router.url;
 
     this.isLoggedIn = !!(token && this.role);
+
     this.isDashboard =
       url.includes('/manager-dashboard') ||
       url.includes('/student-dashboard') ||
       url.includes('/admin-dashboard');
 
-    const section = this.router.parseUrl(url).queryParams['section'];
+    // Get active section from URL
+    const queryPart = url.split('?')[1];
 
-    if (section) {
-      this.activeSection = section;
+    if (queryPart) {
+      const params = new URLSearchParams(queryPart);
+
+      const section = params.get('section');
+
+      this.activeSection = section || 'dashboard';
+    } else {
+      this.activeSection = 'dashboard';
     }
   }
 
@@ -112,27 +115,31 @@ export class Navbar implements OnInit {
     return this.isLoggedIn && this.isDashboard;
   }
 
-  onMenuClick(event: Event, item: any) {
-    event.preventDefault();
-
-    if (!item.section) return;
-
-    let dashboardRoute = '';
-
-    if (this.role === 'manager') {
-      dashboardRoute = '/manager-dashboard';
-    } else if (this.role === 'student') {
-      dashboardRoute = '/student-dashboard';
-    } else if (this.role === 'admin') {
-      dashboardRoute = '/admin-dashboard';
+  getDashboardRoute(): string {
+    switch (this.role.toLowerCase()) {
+      case 'manager':
+        return '/manager-dashboard';
+      case 'student':
+        return '/student-dashboard';
+      case 'admin':
+        return '/admin-dashboard';
+      default:
+        return '/';
     }
+  }
 
-    this.router.navigate([dashboardRoute], {
-      queryParams: {
-        section: item.section,
-      },
-      
-    });
+  getMenuRoute(item: any): string {
+    return item.route || this.getDashboardRoute();
+  }
+
+  getMenuQueryParams(item: any) {
+    return item.section ? { section: item.section } : null;
+  }
+
+  onMenuClick(item: any) {
+    if (item.section) {
+      this.activeSection = item.section;
+    }
 
     this.isSidebarOpen = false;
   }
