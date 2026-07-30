@@ -1,10 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ManagerService } from '../services/manager';
 import { SectionService } from '../services/section.service';
-import { ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -40,8 +39,10 @@ export class ManagerDashboard implements OnInit {
   days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
   // Orders
-  orderTab = 'pending';
+  orderTab: 'pending' | 'preparing' | 'completed' | 'cancelled' = 'pending';
   orders: any[] = [];
+
+  private ordersRequestId = 0;
 
   // Students
   students: any[] = [];
@@ -272,18 +273,59 @@ export class ManagerDashboard implements OnInit {
 
   // Orders
   loadOrders() {
-    this.managerService.getOrdersByStatus(this.orderTab).subscribe({
+    const selectedTab = this.orderTab;
+    const requestId = ++this.ordersRequestId;
+
+    // Immediately clear old tab data
+    this.orders = [];
+
+    this.managerService.getOrdersByStatus(selectedTab).subscribe({
       next: (res: any) => {
-        this.orders = res.data;
+        // Ignore old API response
+        if (requestId !== this.ordersRequestId) {
+          return;
+        }
+
+        // Make sure response belongs to currently selected tab
+        if (this.orderTab !== selectedTab) {
+          return;
+        }
+
+        this.orders = Array.isArray(res?.data) ? [...res.data] : [];
+
+        this.cdr.detectChanges();
       },
-      error: (err: any) => console.error(err),
+
+      error: (err: any) => {
+        // Ignore old request errors
+        if (requestId !== this.ordersRequestId) {
+          return;
+        }
+
+        console.error('Orders API Error:', err);
+
+        this.orders = [];
+
+        this.cdr.detectChanges();
+      },
     });
   }
 
   updateOrderStatus(id: string, status: string) {
     this.managerService.updateOrderStatus(id, status).subscribe({
-      next: () => this.loadOrders(),
-      error: (err: any) => console.error(err),
+      next: () => {
+        // Remove the order immediately from current tab
+        this.orders = this.orders.filter((order) => order._id !== id);
+
+        this.cdr.detectChanges();
+
+        // Refresh current tab from backend
+        this.loadOrders();
+      },
+
+      error: (err: any) => {
+        console.error('Update order status error:', err);
+      },
     });
   }
 

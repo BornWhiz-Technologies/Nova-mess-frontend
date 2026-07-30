@@ -1,27 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SectionService } from '../services/section.service';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { StudentService } from '../services/student';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-student-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './student-dashboard.html',
   styleUrls: ['./student-dashboard.css'],
 })
 export class StudentDashboard implements OnInit {
-  activeSection = 'dashboard';
+  activeSection: string = 'dashboard';
 
   studentName = 'Guna Priya';
   department = 'Information Technology';
   year = 'II Year';
   section = 'A';
 
-  todayMenu = {
-    foodName: 'Veg Meals',
-    price: 70,
-    available: 98,
-  };
+  todayMenu: any = null;
 
   todaySpecial = {
     foodName: 'Chicken Biryani',
@@ -35,30 +34,273 @@ export class StudentDashboard implements OnInit {
     'Please carry your Student ID Card.',
   ];
 
-  recentOrders = [
-    { foodName: 'Veg Meals', date: 'Today', status: 'Delivered' },
-    { foodName: 'Lemon Rice', date: 'Yesterday', status: 'Delivered' },
-    { foodName: 'Chicken Biryani', date: '2 Days Ago', status: 'Cancelled' },
-  ];
+  menuItems: any[] = [];
+  orderHistory: any[] = [];
 
-  menuItems = [
-    { mealType: 'Breakfast', items: 'Idly, Sambar, Chutney', time: '7:30 AM - 9:00 AM' },
-    { mealType: 'Lunch', items: 'Rice, Sambar, Kootu, Rasam', time: '12:00 PM - 2:00 PM' },
-    { mealType: 'Dinner', items: 'Chapati, Paneer Curry, Rice', time: '7:00 PM - 9:00 PM' },
-  ];
+  selectedFood: any = null;
+  showOrderBox = false;
+  quantity = 1;
 
-  orderHistory = [
-    { foodName: 'Veg Meals', date: '2026-07-20', amount: 70, status: 'Delivered' },
-    { foodName: 'Lemon Rice', date: '2026-07-19', amount: 50, status: 'Delivered' },
-    { foodName: 'Chicken Biryani', date: '2026-07-18', amount: 120, status: 'Cancelled' },
-    { foodName: 'Meals', date: '2026-07-17', amount: 70, status: 'Delivered' },
-  ];
+  isLoading = false;
 
-  constructor(private sectionService: SectionService) {}
+  constructor(
+    private studentService: StudentService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit() {
-    this.sectionService.activeSection$.subscribe((section) => {
+    this.route.queryParams.subscribe((params) => {
+      const section = params['section'] || 'dashboard';
+
+      console.log('Route Section:', section);
+
       this.activeSection = section;
+
+      this.loadSectionData(section);
     });
+  }
+
+  // ===============================
+  // SECTION NAVIGATION
+  // ===============================
+
+  loadSectionData(section: string) {
+    switch (section) {
+      case 'dashboard':
+        this.loadDashboardData();
+        break;
+
+      case 'menu':
+        this.loadTodayMenu();
+        break;
+
+      case 'orders':
+        this.loadOrders();
+        break;
+
+      case 'profile':
+        this.loadProfile();
+        break;
+
+      default:
+        this.activeSection = 'dashboard';
+        this.loadDashboardData();
+        break;
+    }
+  }
+
+  // ===============================
+  // DASHBOARD
+  // ===============================
+
+  loadDashboardData() {
+    this.isLoading = true;
+
+    this.studentService.getDashboard().subscribe({
+      next: (res: any) => {
+        console.log('DASHBOARD RESPONSE:', res);
+
+        const dashboard = res?.data;
+        const profile = dashboard?.profile;
+
+        if (profile) {
+          this.studentName = profile.fullName || profile.username || this.studentName;
+
+          this.department = profile.department || '-';
+          this.year = profile.year || '-';
+          this.section = profile.section || '-';
+        }
+
+        if (dashboard?.todayMenu) {
+          this.todayMenu = dashboard.todayMenu;
+        } else {
+          this.todayMenu = null;
+        }
+
+        this.orderHistory = dashboard?.recentOrders || [];
+
+        this.isLoading = false;
+
+        this.cdr.detectChanges();
+      },
+
+      error: (err) => {
+        console.error('Unable to load student dashboard:', err);
+
+        this.isLoading = false;
+
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  // ===============================
+  // PROFILE
+  // ===============================
+
+  loadProfile() {
+    this.isLoading = true;
+
+    this.studentService.getDashboard().subscribe({
+      next: (res: any) => {
+        console.log('PROFILE RESPONSE:', res);
+
+        const profile = res?.data?.profile;
+
+        if (profile) {
+          this.studentName = profile.fullName || profile.username || this.studentName;
+
+          this.department = profile.department || '-';
+          this.year = profile.year || '-';
+          this.section = profile.section || '-';
+        }
+
+        this.isLoading = false;
+
+        this.cdr.detectChanges();
+      },
+
+      error: (err) => {
+        console.error('Unable to load profile:', err);
+
+        this.isLoading = false;
+
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  // ===============================
+  // MENU
+  // ===============================
+
+  loadTodayMenu() {
+    this.isLoading = true;
+
+    this.studentService.getMenus().subscribe({
+      next: (res: any) => {
+        console.log('MENU RESPONSE:', res);
+
+        const menus = Array.isArray(res?.data) ? res.data : [];
+
+        this.menuItems = menus.filter((menu: any) => menu.available !== false);
+
+        this.todayMenu = this.menuItems[0] || null;
+
+        this.isLoading = false;
+
+        this.cdr.detectChanges();
+      },
+
+      error: (err) => {
+        console.error('Unable to load menu:', err);
+
+        this.menuItems = [];
+        this.todayMenu = null;
+
+        this.isLoading = false;
+
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  // ===============================
+  // ORDERS
+  // ===============================
+
+  loadOrders() {
+    this.isLoading = true;
+
+    this.studentService.getOrders().subscribe({
+      next: (res: any) => {
+        console.log('ORDERS RESPONSE:', res);
+
+        this.orderHistory = res?.data || [];
+
+        this.isLoading = false;
+
+        this.cdr.detectChanges();
+      },
+
+      error: (err) => {
+        console.error('Unable to load student orders:', err);
+
+        this.orderHistory = [];
+
+        this.isLoading = false;
+
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  // ===============================
+  // ORDER NOW
+  // ===============================
+
+  orderNow(menu: any) {
+    this.selectedFood = menu;
+    this.quantity = 1;
+    this.showOrderBox = true;
+
+    console.log('Ordering Food:', this.selectedFood);
+  }
+
+  // ===============================
+  // CONFIRM ORDER
+  // ===============================
+
+  confirmOrder() {
+    if (!this.selectedFood || this.quantity < 1) {
+      return;
+    }
+
+    const order = {
+      menuId: this.selectedFood._id,
+      studentName: this.studentName,
+      foodName: this.selectedFood.foodName,
+      quantity: this.quantity,
+      totalPrice: this.selectedFood.price * this.quantity,
+    };
+
+    console.log('Sending Order:', order);
+
+    this.studentService.placeOrder(order).subscribe({
+      next: (res: any) => {
+        console.log('ORDER RESPONSE:', res);
+
+        if (res.success) {
+          this.showOrderBox = false;
+          this.selectedFood = null;
+          this.quantity = 1;
+
+          alert('Order placed successfully');
+
+          // Fresh order data
+          this.loadOrders();
+        } else {
+          alert('Order failed');
+        }
+      },
+
+      error: (err) => {
+        console.error('Order Error:', err);
+
+        alert(err.error?.message || 'Unable to place order');
+      },
+    });
+  }
+
+  // ===============================
+  // CANCEL ORDER POPUP
+  // ===============================
+
+  cancelOrder() {
+    this.showOrderBox = false;
+    this.selectedFood = null;
+    this.quantity = 1;
   }
 }
