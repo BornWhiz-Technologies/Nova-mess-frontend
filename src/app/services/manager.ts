@@ -121,6 +121,26 @@ export class ManagerService {
     );
   }
 
+  // ===============================
+  // SUPPORT - FEEDBACK & REPORTS
+  // ===============================
+
+  getSupportRequests(): Observable<any> {
+    return this.http.get('http://localhost:5000/api/support', {
+      headers: this.getHeaders(),
+    });
+  }
+
+  updateSupportStatus(id: string, status: string): Observable<any> {
+    return this.http.put(
+      `http://localhost:5000/api/support/${id}/status`,
+      { status },
+      {
+        headers: this.getHeaders(),
+      },
+    );
+  }
+
   getAnalytics(): Observable<any> {
     return this.http.get('http://localhost:5000/api/manager/analytics', {
       headers: this.getHeaders(),

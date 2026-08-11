@@ -15,6 +15,14 @@ import { ChangeDetectorRef } from '@angular/core';
 export class StudentDashboard implements OnInit {
   activeSection: string = 'dashboard';
 
+  supportOption: string = '';
+
+  feedbackRating: number = 0;
+  feedbackComment: string = '';
+
+  reportType: string = '';
+  reportDescription: string = '';
+
   studentName = 'Guna Priya';
   department = 'Information Technology';
   year = 'II Year';
@@ -59,6 +67,8 @@ export class StudentDashboard implements OnInit {
       this.activeSection = section;
 
       this.loadSectionData(section);
+
+      this.cdr.detectChanges();
     });
   }
 
@@ -82,6 +92,10 @@ export class StudentDashboard implements OnInit {
 
       case 'profile':
         this.loadProfile();
+        break;
+
+      case 'support':
+        this.supportOption = '';
         break;
 
       default:
@@ -179,7 +193,7 @@ export class StudentDashboard implements OnInit {
   loadTodayMenu() {
     this.isLoading = true;
 
-    this.studentService.getMenus().subscribe({
+    this.studentService.getTodayMenus().subscribe({
       next: (res: any) => {
         console.log('MENU RESPONSE:', res);
 
@@ -281,6 +295,11 @@ export class StudentDashboard implements OnInit {
 
           // Fresh order data
           this.loadOrders();
+          this.activeSection = 'orders';
+
+          this.orderHistory.unshift(res.data);
+
+          this.cdr.detectChanges();
         } else {
           alert('Order failed');
         }
@@ -302,5 +321,70 @@ export class StudentDashboard implements OnInit {
     this.showOrderBox = false;
     this.selectedFood = null;
     this.quantity = 1;
+  }
+
+  openFeedback() {
+    this.supportOption = 'feedback';
+  }
+
+  openReport() {
+    this.supportOption = 'report';
+  }
+
+  backToSupport() {
+    this.supportOption = '';
+  }
+
+  submitFeedback() {
+    if (!this.feedbackRating || !this.feedbackComment.trim()) {
+      alert('Please give a rating and feedback.');
+      return;
+    }
+
+    console.log('Feedback:', {
+      rating: this.feedbackRating,
+      comment: this.feedbackComment,
+    });
+
+    alert('Thank you! Your feedback has been submitted.');
+
+    this.feedbackRating = 0;
+    this.feedbackComment = '';
+    this.supportOption = '';
+  }
+
+  submitReport() {
+    if (!this.reportType || !this.reportDescription.trim()) {
+      alert('Please select an issue type and describe the issue.');
+      return;
+    }
+
+    console.log('Report:', {
+      type: this.reportType,
+      description: this.reportDescription,
+    });
+
+    alert('Your report has been submitted successfully.');
+
+    this.reportType = '';
+    this.reportDescription = '';
+    this.supportOption = '';
+  }
+
+  getFoodImage(foodName: string): string {
+    if (!foodName) return 'foods/default.jpg';
+
+    const name = foodName.toLowerCase();
+
+    if (name.includes('idli')) return 'foods/idly.jpg';
+    if (name.includes('dosa')) return 'foods/dosa.jpg';
+    if (name.includes('pongal')) return 'foods/pongal.jpg';
+    if (name.includes('poori')) return 'foods/poori.jpg';
+    if (name.includes('biriyani')) return 'foods/biriyani.jpg';
+    if (name.includes('friedrice')) return 'foods/friedrice.jpg';
+    if (name.includes('chapati')) return 'foods/chapati.jpg';
+    if (name.includes('pulao')) return 'foods/pulao.jpg';
+
+    return 'foods/default.jpg';
   }
 }

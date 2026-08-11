@@ -42,4 +42,8 @@ export class StudentService {
   getMenus(): Observable<any> {
     return this.http.get('http://localhost:5000/api/menu');
   }
+
+  getTodayMenus(): Observable<any> {
+    return this.http.get('http://localhost:5000/api/menu/today');
+  }
 }

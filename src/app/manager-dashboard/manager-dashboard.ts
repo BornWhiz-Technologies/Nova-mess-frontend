@@ -51,7 +51,7 @@ export class ManagerDashboard implements OnInit {
   studentFilter = 'all';
 
   // Reports
-  reportTab = 'complaints';
+  reportTab: 'complaints' | 'feedback' | 'resolved' = 'complaints';
   reports: any[] = [];
 
   // Analytics
@@ -355,18 +355,38 @@ export class ManagerDashboard implements OnInit {
 
   // Reports
   loadReports() {
-    this.managerService.getReports().subscribe({
+    this.managerService.getSupportRequests().subscribe({
       next: (res: any) => {
-        this.reports = res.data.filter((r: any) => r.type === this.reportTab);
+        const data = res.data || [];
+
+        if (this.reportTab === 'complaints') {
+          // Student side "report" → Manager side "Complaints"
+          this.reports = data.filter((r: any) => r.type === 'report' && r.status !== 'Resolved');
+        } else if (this.reportTab === 'feedback') {
+          this.reports = data.filter((r: any) => r.type === 'feedback' && r.status !== 'Resolved');
+        } else if (this.reportTab === 'resolved') {
+          this.reports = data.filter((r: any) => r.status === 'Resolved');
+        }
+
+        this.cdr.detectChanges();
       },
-      error: (err: any) => console.error(err),
+
+      error: (err: any) => {
+        console.error('Support API Error:', err);
+        this.reports = [];
+      },
     });
   }
 
   markResolved(id: string) {
-    this.managerService.updateReportStatus(id, 'resolved').subscribe({
-      next: () => this.loadReports(),
-      error: (err: any) => console.error(err),
+    this.managerService.updateSupportStatus(id, 'Resolved').subscribe({
+      next: () => {
+        this.loadReports();
+      },
+
+      error: (err: any) => {
+        console.error('Update support status error:', err);
+      },
     });
   }
 
