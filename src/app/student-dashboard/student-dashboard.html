@@ -20,41 +20,41 @@
         <p>{{ year }} &bull; Section {{ section }}</p>
       </div>
     </div>
-
     <div class="card">
-      <div class="card-title"><span class="material-icons">restaurant</span> Today's Menu</div>
-      <div class="menu-item" *ngIf="todayMenu; else noMenu">
-        <div>
-          <h4>{{ todayMenu.foodName }}</h4>
-          <p>&#8377; {{ todayMenu.price }}</p>
-        </div>
-        <button type="button" (click)="orderNow(todayMenu)">Order Now</button>
+      <div class="card-title">
+        <span class="material-icons">restaurant</span>
+        Today's Menu
       </div>
-      <ng-template #noMenu><p>No menu has been added for today.</p></ng-template>
-    </div>
 
-    <div class="card">
-      <div class="card-title"><span class="material-icons">star</span> Today's Special</div>
-      <div class="special-food" *ngIf="todayMenu; else noSpecial">
+      <div class="special-food" *ngIf="todayMenu; else noMenu">
         <img
           [src]="
-            todayMenu.image
+            todayMenu?.image
               ? 'http://localhost:5000/uploads/' + todayMenu.image
-              : todaySpecial.image
+              : getFoodImage(todayMenu?.foodName)
           "
-          alt="food"
+          alt="Today's Menu"
         />
+
         <div>
-          <h4>{{ todayMenu?.foodName }}</h4>
+          <h3 style="margin-top: 10px; color: #d4a73a">{{ todayMenu.foodName }}</h3>
+          <br />
 
-          <p>₹ {{ todayMenu?.price }}</p>
+          <p><strong>Meal :</strong> {{ todayMenu.mealType }}</p>
 
-          <p>{{ todayMenu?.mealType }}</p>
+          <p><strong>Category :</strong> {{ todayMenu.category }}</p>
 
-          <p>{{ todayMenu?.category }}</p>
+          <p><strong>Description :</strong> {{ todayMenu.description }}</p>
+
+          <h3 style="margin-top: 10px; color: #d4a73a">₹ {{ todayMenu.price }}</h3>
+
+          <button class="order-btn" (click)="orderNow(todayMenu)">Order Now</button>
         </div>
       </div>
-      <ng-template #noSpecial><p>Today's special will be updated soon.</p></ng-template>
+
+      <ng-template #noMenu>
+        <p>No menu available for this meal.</p>
+      </ng-template>
     </div>
 
     <div class="card">
@@ -135,8 +135,9 @@
         <tbody>
           <tr *ngFor="let o of orderHistory">
             <td>{{ o.foodName }}</td>
-            <td>{{ o.date }}</td>
-            <td>&#8377; {{ o.amount }}</td>
+            <td>{{ o.createdAt | date: 'dd-MM-yyyy hh:mm a' }}</td>
+
+            <td>&#8377; {{ o.totalPrice }}</td>
             <td>
               <span
                 class="status-badge"
@@ -173,6 +174,172 @@
       <div class="info-row">
         <label>Section</label>
         <p>{{ section }}</p>
+      </div>
+    </div>
+  </ng-container>
+  <!-- ================= SUPPORT ================= -->
+
+  <ng-container *ngIf="activeSection === 'support'">
+    <!-- SUPPORT HOME -->
+    <div class="support-home" *ngIf="supportOption === ''">
+      <!-- HEADER -->
+      <div class="support-header">
+        <div class="support-header-icon">
+          <span class="material-icons">support_agent</span>
+        </div>
+
+        <div>
+          <h2>Support</h2>
+          <p>Need help? Choose an option below.</p>
+        </div>
+      </div>
+
+      <!-- SUPPORT OPTIONS -->
+      <div class="support-grid">
+        <!-- GIVE FEEDBACK -->
+        <div class="support-card" (click)="openFeedback()">
+          <div class="support-icon">
+            <span class="material-icons">rate_review</span>
+          </div>
+
+          <div class="support-card-content">
+            <h3>Give Feedback</h3>
+
+            <p>Share your experience and help us improve our mess services.</p>
+          </div>
+
+          <span class="material-icons support-arrow"> arrow_forward_ios </span>
+        </div>
+
+        <!-- REPORT ISSUE -->
+        <div class="support-card" (click)="openReport()">
+          <div class="support-icon">
+            <span class="material-icons">report_problem</span>
+          </div>
+
+          <div class="support-card-content">
+            <h3>Report an Issue</h3>
+
+            <p>If you have any problem, let us know and we will look into it.</p>
+          </div>
+
+          <span class="material-icons support-arrow"> arrow_forward_ios </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= FEEDBACK ================= -->
+
+    <div *ngIf="supportOption === 'feedback'" class="support-form-wrapper">
+      <button class="back-support-btn" (click)="backToSupport()">
+        <span class="material-icons">arrow_back</span>
+        Back to Support
+      </button>
+
+      <div class="support-form-card">
+        <div class="form-icon">
+          <span class="material-icons">rate_review</span>
+        </div>
+
+        <h2>Give Feedback</h2>
+
+        <p class="form-description">We value your feedback. Tell us about your experience.</p>
+
+        <!-- RATING -->
+
+        <div class="rating-section">
+          <label>How was your experience?</label>
+
+          <div class="stars">
+            <span
+              *ngFor="let star of [1, 2, 3, 4, 5]"
+              class="material-icons star"
+              [class.selected]="feedbackRating >= star"
+              (click)="feedbackRating = star"
+            >
+              star
+            </span>
+          </div>
+
+          <p *ngIf="feedbackRating > 0">{{ feedbackRating }} / 5</p>
+        </div>
+
+        <!-- COMMENT -->
+
+        <div class="form-group">
+          <label>Your Feedback</label>
+
+          <textarea
+            [(ngModel)]="feedbackComment"
+            placeholder="Tell us about your experience..."
+            rows="5"
+          ></textarea>
+        </div>
+
+        <button class="support-submit-btn" (click)="submitFeedback()">
+          <span class="material-icons">send</span>
+
+          Submit Feedback
+        </button>
+      </div>
+    </div>
+
+    <!-- ================= REPORT ================= -->
+
+    <div *ngIf="supportOption === 'report'" class="support-form-wrapper">
+      <button class="back-support-btn" (click)="backToSupport()">
+        <span class="material-icons">arrow_back</span>
+        Back to Support
+      </button>
+
+      <div class="support-form-card">
+        <div class="form-icon report-icon">
+          <span class="material-icons">report_problem</span>
+        </div>
+
+        <h2>Report an Issue</h2>
+
+        <p class="form-description">Facing a problem? Tell us what happened.</p>
+
+        <!-- ISSUE TYPE -->
+
+        <div class="form-group">
+          <label>Issue Type</label>
+
+          <select [(ngModel)]="reportType">
+            <option value="">Select an issue</option>
+
+            <option value="Food Quality">Food Quality</option>
+
+            <option value="Order Issue">Order Issue</option>
+
+            <option value="Payment Issue">Payment Issue</option>
+
+            <option value="Menu Issue">Menu Issue</option>
+
+            <option value="Technical Issue">Technical Issue</option>
+
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <!-- DESCRIPTION -->
+
+        <div class="form-group">
+          <label>Describe the Issue</label>
+
+          <textarea
+            [(ngModel)]="reportDescription"
+            placeholder="Please describe the issue..."
+            rows="5"
+          ></textarea>
+        </div>
+
+        <button class="support-submit-btn report-submit-btn" (click)="submitReport()">
+          <span class="material-icons">send</span>
+
+          Submit Report
+        </button>
       </div>
     </div>
   </ng-container>

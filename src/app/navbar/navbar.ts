@@ -34,6 +34,7 @@ export class Navbar implements OnInit {
     { label: 'Menu', icon: 'restaurant_menu', section: 'menu' },
     { label: 'Orders', icon: 'shopping_cart', section: 'orders' },
     { label: 'Profile', icon: 'person', section: 'profile' },
+    { label: 'Support', icon: 'support_agent', section: 'support' },
   ];
 
   adminMenuItems: any[] = [

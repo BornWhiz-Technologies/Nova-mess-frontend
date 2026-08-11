@@ -307,7 +307,11 @@
 
     <!-- ===== REPORTS ===== -->
     <ng-container *ngIf="activeSection === 'reports'">
-      <div class="section-header"><h1>Reports</h1></div>
+      <div class="section-header">
+        <h1>Reports</h1>
+      </div>
+
+      <!-- Report Tabs -->
       <div class="tabs">
         <button
           [class.active]="reportTab === 'complaints'"
@@ -315,12 +319,14 @@
         >
           Complaints
         </button>
+
         <button
           [class.active]="reportTab === 'feedback'"
           (click)="reportTab = 'feedback'; loadReports()"
         >
           Feedback
         </button>
+
         <button
           [class.active]="reportTab === 'resolved'"
           (click)="reportTab = 'resolved'; loadReports()"
@@ -328,24 +334,53 @@
           Resolved
         </button>
       </div>
+
+      <!-- Reports List -->
       <div class="reports-list">
         <div class="report-card" *ngFor="let r of reports">
+          <!-- Header -->
           <div class="report-header">
-            <h3>{{ r.title }}</h3>
-            <span class="report-date">{{ r.createdAt | date: 'short' }}</span>
+            <h3>
+              {{ r.type === 'feedback' ? 'Student Feedback' : r.issueType }}
+            </h3>
+
+            <span class="report-date">
+              {{ r.createdAt | date: 'short' }}
+            </span>
           </div>
-          <p>{{ r.message }}</p>
-          <p class="report-student">By: {{ r.studentName }}</p>
+
+          <!-- Feedback -->
+          <div *ngIf="r.type === 'feedback'">
+            <p class="rating">Rating: ⭐ {{ r.rating }}/5</p>
+
+            <p>
+              {{ r.comment }}
+            </p>
+          </div>
+
+          <!-- Complaint / Report -->
+          <div *ngIf="r.type === 'report'">
+            <p class="report-description">
+              {{ r.description }}
+            </p>
+          </div>
+
+          <!-- Status -->
+          <p class="report-status">Status: {{ r.status }}</p>
+
+          <!-- Resolve -->
           <button
-            *ngIf="reportTab !== 'resolved'"
+            *ngIf="r.status !== 'Resolved'"
             class="btn-sm btn-resolve"
             (click)="markResolved(r._id)"
           >
             Mark Resolved
           </button>
         </div>
+
+        <!-- Empty -->
         <div class="empty-state" *ngIf="reports.length === 0">
-          <p>No {{ reportTab }} reports.</p>
+          <p>No {{ reportTab }} available.</p>
         </div>
       </div>
     </ng-container>

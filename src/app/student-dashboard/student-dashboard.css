@@ -904,3 +904,893 @@ body {
     transform: rotate(360deg);
   }
 }
+/* =========================================================
+   SUPPORT PAGE
+   ========================================================= */
+
+.support-page {
+  width: 100%;
+}
+
+/* Main Support Container */
+.support-container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 30px;
+  box-sizing: border-box;
+}
+
+/* Support Heading */
+.support-header {
+  margin-bottom: 30px;
+}
+
+.support-header h1 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #d9a928;
+  font-size: 32px;
+  margin: 0 0 10px;
+  font-weight: 700;
+}
+
+.support-header h1 .material-icons {
+  font-size: 34px;
+}
+
+.support-header p {
+  color: #d7ddd9;
+  font-size: 16px;
+  margin: 0;
+}
+
+/* =========================================================
+   SUPPORT OPTIONS
+   ========================================================= */
+
+.support-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.support-option-card {
+  position: relative;
+  background: linear-gradient(145deg, #08281d, #0b3426);
+
+  border: 1px solid rgba(217, 169, 40, 0.25);
+  border-radius: 18px;
+
+  padding: 30px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+.support-option-card:hover {
+  transform: translateY(-5px);
+
+  border-color: #d9a928;
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.35),
+    0 0 20px rgba(217, 169, 40, 0.08);
+
+  background: linear-gradient(145deg, #0b3023, #10402f);
+}
+
+/* Icon */
+.support-option-icon {
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(217, 169, 40, 0.12);
+
+  border: 1px solid rgba(217, 169, 40, 0.35);
+
+  border-radius: 14px;
+
+  margin-bottom: 20px;
+}
+
+.support-option-icon .material-icons {
+  color: #d9a928;
+  font-size: 30px;
+}
+
+/* Card Heading */
+.support-option-card h3 {
+  color: #ffffff;
+  font-size: 21px;
+  margin: 0 0 8px;
+}
+
+.support-option-card p {
+  color: #b9c5bf;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Arrow */
+.support-option-arrow {
+  position: absolute;
+
+  right: 25px;
+  bottom: 25px;
+
+  color: #d9a928;
+
+  transition: transform 0.25s ease;
+}
+
+.support-option-card:hover .support-option-arrow {
+  transform: translateX(5px);
+}
+
+/* =========================================================
+   FEEDBACK / REPORT FORM WRAPPER
+   ========================================================= */
+
+.support-form-wrapper {
+  width: 100%;
+  max-width: 850px;
+
+  margin: 0 auto;
+  padding: 30px;
+
+  box-sizing: border-box;
+}
+
+/* Back Button */
+.back-support-btn {
+  display: inline-flex;
+
+  align-items: center;
+  gap: 8px;
+
+  background: transparent;
+
+  border: none;
+
+  color: #d9a928;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  padding: 8px 0;
+
+  margin-bottom: 22px;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.back-support-btn:hover {
+  color: #f1c84b;
+  transform: translateX(-4px);
+}
+
+.back-support-btn .material-icons {
+  font-size: 20px;
+}
+
+/* =========================================================
+   FORM CARD
+   ========================================================= */
+
+.support-form-card {
+  background: linear-gradient(145deg, #08271c, #0c3426);
+
+  border: 1px solid rgba(217, 169, 40, 0.25);
+
+  border-radius: 22px;
+
+  padding: 40px;
+
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.28);
+}
+
+/* Form Icon */
+.form-icon {
+  width: 70px;
+  height: 70px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(217, 169, 40, 0.12);
+
+  border: 1px solid rgba(217, 169, 40, 0.35);
+
+  border-radius: 18px;
+
+  margin-bottom: 20px;
+}
+
+.form-icon .material-icons {
+  color: #d9a928;
+  font-size: 36px;
+}
+
+/* Report Icon */
+.form-icon.report-icon {
+  background: rgba(217, 169, 40, 0.1);
+}
+
+.form-icon.report-icon .material-icons {
+  color: #e5b52f;
+}
+
+/* Form Title */
+.support-form-card h2 {
+  color: #ffffff;
+
+  font-size: 28px;
+
+  margin: 0 0 8px;
+
+  font-weight: 700;
+}
+
+/* Description */
+.form-description {
+  color: #b8c5be;
+
+  font-size: 15px;
+
+  line-height: 1.6;
+
+  margin: 0 0 30px;
+}
+
+/* =========================================================
+   RATING
+   ========================================================= */
+
+.rating-section {
+  margin-bottom: 28px;
+}
+
+.rating-section label {
+  display: block;
+
+  color: #ffffff;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  margin-bottom: 12px;
+}
+
+.stars {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.star {
+  color: #52645b;
+
+  font-size: 34px;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.star:hover {
+  color: #d9a928;
+  transform: scale(1.12);
+}
+
+.star.selected {
+  color: #d9a928;
+
+  text-shadow: 0 0 8px rgba(217, 169, 40, 0.25);
+}
+
+/* Rating Number */
+.rating-section > p {
+  color: #d9a928;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  margin: 8px 0 0;
+}
+
+/* =========================================================
+   FORM GROUP
+   ========================================================= */
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+
+  color: #ffffff;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  margin-bottom: 9px;
+}
+
+/* Textarea + Select */
+.form-group textarea,
+.form-group select {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  background: #061f16;
+
+  color: #ffffff;
+
+  border: 1px solid rgba(217, 169, 40, 0.25);
+
+  border-radius: 12px;
+
+  padding: 13px 15px;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.form-group textarea {
+  resize: vertical;
+
+  min-height: 130px;
+}
+
+.form-group select {
+  height: 48px;
+
+  cursor: pointer;
+}
+
+/* Placeholder */
+.form-group textarea::placeholder {
+  color: #718078;
+}
+
+/* Focus */
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: #d9a928;
+
+  background: #07261b;
+
+  box-shadow: 0 0 0 3px rgba(217, 169, 40, 0.08);
+}
+
+/* Select options */
+.form-group select option {
+  background: #08271c;
+
+  color: #ffffff;
+}
+
+/* =========================================================
+   SUBMIT BUTTON
+   ========================================================= */
+
+.support-submit-btn {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  height: 50px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  background: #d9a928;
+
+  color: #071c14;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.support-submit-btn:hover {
+  background: #edc04a;
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 8px 20px rgba(217, 169, 40, 0.2);
+}
+
+.support-submit-btn:active {
+  transform: translateY(0);
+}
+
+.support-submit-btn .material-icons {
+  font-size: 20px;
+}
+
+/* Report submit */
+.report-submit-btn {
+  margin-top: 5px;
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.support-form-card .loader {
+  color: #d9a928;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .support-container {
+    padding: 30px 20px;
+  }
+
+  .support-header h1 {
+    font-size: 27px;
+  }
+
+  .support-options {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .support-option-card {
+    padding: 25px;
+  }
+
+  .support-form-wrapper {
+    padding: 25px 18px;
+  }
+
+  .support-form-card {
+    padding: 28px 22px;
+  }
+
+  .support-form-card h2 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .support-container {
+    padding: 25px 15px;
+  }
+
+  .support-header h1 {
+    font-size: 24px;
+  }
+
+  .support-header h1 .material-icons {
+    font-size: 28px;
+  }
+
+  .support-option-card {
+    padding: 22px;
+  }
+
+  .support-option-icon {
+    width: 52px;
+    height: 52px;
+  }
+
+  .support-form-wrapper {
+    padding: 20px 12px;
+  }
+
+  .support-form-card {
+    padding: 24px 18px;
+    border-radius: 17px;
+  }
+
+  .form-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .form-icon .material-icons {
+    font-size: 30px;
+  }
+
+  .support-form-card h2 {
+    font-size: 22px;
+  }
+
+  .form-description {
+    font-size: 14px;
+  }
+
+  .star {
+    font-size: 30px;
+  }
+
+  .support-submit-btn {
+    height: 48px;
+  }
+}
+/* ==========================================
+   MESS NOVA - SUPPORT PAGE
+========================================== */
+
+.support-home {
+  min-height: calc(100vh - 180px);
+
+  padding: 45px 7%;
+
+  background:
+    radial-gradient(circle at top center, rgba(22, 82, 61, 0.25), transparent 55%), #031c14;
+
+  color: #ffffff;
+}
+
+/* ==========================================
+   SUPPORT HEADER
+========================================== */
+
+.support-header {
+  max-width: 900px;
+
+  margin: 0 auto 35px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+}
+
+/* Header Icon */
+
+.support-header-icon {
+  width: 60px;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(228, 172, 27, 0.1);
+
+  border: 1px solid rgba(228, 172, 27, 0.45);
+
+  border-radius: 15px;
+
+  color: #e4ac1b;
+}
+
+.support-header-icon .material-icons {
+  font-size: 30px;
+}
+
+/* Header Text */
+
+.support-header h2 {
+  margin: 0 0 5px;
+
+  font-size: 30px;
+
+  font-weight: 700;
+
+  color: #ffffff;
+}
+
+.support-header p {
+  margin: 0;
+
+  font-size: 15px;
+
+  color: #aebfba;
+}
+
+/* ==========================================
+   SUPPORT GRID
+========================================== */
+
+.support-grid {
+  max-width: 900px;
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 25px;
+}
+
+/* ==========================================
+   SUPPORT CARD
+========================================== */
+
+.support-card {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  gap: 20px;
+
+  min-height: 150px;
+
+  padding: 25px;
+
+  background: rgba(8, 48, 36, 0.9);
+
+  border: 1px solid rgba(228, 172, 27, 0.35);
+
+  border-radius: 18px;
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Gold side line */
+
+.support-card::before {
+  content: '';
+
+  position: absolute;
+
+  left: 0;
+  top: 0;
+
+  width: 4px;
+  height: 100%;
+
+  background: #e4ac1b;
+
+  transform: scaleY(0);
+
+  transform-origin: bottom;
+
+  transition: transform 0.3s ease;
+}
+
+/* Hover */
+
+.support-card:hover {
+  transform: translateY(-6px);
+
+  background: rgba(10, 58, 43, 0.98);
+
+  border-color: #e4ac1b;
+
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(228, 172, 27, 0.08);
+}
+
+.support-card:hover::before {
+  transform: scaleY(1);
+}
+
+/* ==========================================
+   CARD ICON
+========================================== */
+
+.support-icon {
+  flex-shrink: 0;
+
+  width: 62px;
+  height: 62px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(228, 172, 27, 0.1);
+
+  border: 1px solid rgba(228, 172, 27, 0.45);
+
+  border-radius: 15px;
+
+  color: #e4ac1b;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.support-icon .material-icons {
+  font-size: 30px;
+}
+
+/* Icon Hover */
+
+.support-card:hover .support-icon {
+  background: #e4ac1b;
+
+  color: #062117;
+
+  transform: scale(1.06);
+}
+
+/* ==========================================
+   CARD CONTENT
+========================================== */
+
+.support-card-content {
+  flex: 1;
+}
+
+.support-card-content h3 {
+  margin: 0 0 8px;
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+  color: #ffffff;
+}
+
+.support-card-content p {
+  margin: 0;
+
+  font-size: 14px;
+
+  line-height: 1.6;
+
+  color: #aebfba;
+}
+
+/* ==========================================
+   ARROW
+========================================== */
+
+.support-arrow {
+  flex-shrink: 0;
+
+  font-size: 20px;
+
+  color: #e4ac1b;
+
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
+}
+
+.support-card:hover .support-arrow {
+  transform: translateX(6px);
+
+  color: #ffffff;
+}
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 800px) {
+  .support-home {
+    padding: 35px 25px;
+  }
+
+  .support-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 500px) {
+  .support-home {
+    padding: 25px 18px;
+  }
+
+  .support-header {
+    gap: 13px;
+
+    margin-bottom: 25px;
+  }
+
+  .support-header-icon {
+    width: 50px;
+    height: 50px;
+
+    border-radius: 12px;
+  }
+
+  .support-header-icon .material-icons {
+    font-size: 25px;
+  }
+
+  .support-header h2 {
+    font-size: 24px;
+  }
+
+  .support-header p {
+    font-size: 13px;
+  }
+
+  .support-card {
+    min-height: auto;
+
+    padding: 20px 17px;
+
+    gap: 14px;
+
+    border-radius: 15px;
+  }
+
+  .support-icon {
+    width: 50px;
+    height: 50px;
+
+    border-radius: 12px;
+  }
+
+  .support-icon .material-icons {
+    font-size: 25px;
+  }
+
+  .support-card-content h3 {
+    font-size: 17px;
+  }
+
+  .support-card-content p {
+    font-size: 12px;
+  }
+
+  .support-arrow {
+    font-size: 17px;
+  }
+}
