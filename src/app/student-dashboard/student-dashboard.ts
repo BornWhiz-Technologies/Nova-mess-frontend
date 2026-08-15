@@ -341,16 +341,39 @@ export class StudentDashboard implements OnInit {
       return;
     }
 
-    console.log('Feedback:', {
+    const feedbackData = {
       rating: this.feedbackRating,
-      comment: this.feedbackComment,
+      comment: this.feedbackComment.trim(),
+    };
+
+    console.log('Sending Feedback:', feedbackData);
+
+    this.studentService.submitFeedback(feedbackData).subscribe({
+      next: (res: any) => {
+        console.log('FEEDBACK RESPONSE:', res);
+
+        if (res.success) {
+          // Clear the form
+          this.feedbackRating = 0;
+          this.feedbackComment = '';
+
+          // Return to Support main page
+          this.supportOption = '';
+
+          this.cdr.detectChanges();
+
+          alert('Thank you! Your feedback has been submitted successfully.');
+        } else {
+          alert(res.message || 'Feedback submission failed.');
+        }
+      },
+
+      error: (err: any) => {
+        console.error('Feedback Error:', err);
+
+        alert(err.error?.message || 'Unable to submit feedback. Please try again.');
+      },
     });
-
-    alert('Thank you! Your feedback has been submitted.');
-
-    this.feedbackRating = 0;
-    this.feedbackComment = '';
-    this.supportOption = '';
   }
 
   submitReport() {
@@ -359,16 +382,39 @@ export class StudentDashboard implements OnInit {
       return;
     }
 
-    console.log('Report:', {
-      type: this.reportType,
-      description: this.reportDescription,
+    const reportData = {
+      issueType: this.reportType,
+      description: this.reportDescription.trim(),
+    };
+
+    console.log('Sending Report:', reportData);
+
+    this.studentService.submitReport(reportData).subscribe({
+      next: (res: any) => {
+        console.log('REPORT RESPONSE:', res);
+
+        if (res.success) {
+          // Clear the report form
+          this.reportType = '';
+          this.reportDescription = '';
+
+          // Go back to Support main page
+          this.supportOption = '';
+
+          this.cdr.detectChanges();
+
+          alert('Your report has been submitted successfully.');
+        } else {
+          alert(res.message || 'Report submission failed.');
+        }
+      },
+
+      error: (err: any) => {
+        console.error('Report Error:', err);
+
+        alert(err.error?.message || 'Unable to submit report. Please try again.');
+      },
     });
-
-    alert('Your report has been submitted successfully.');
-
-    this.reportType = '';
-    this.reportDescription = '';
-    this.supportOption = '';
   }
 
   getFoodImage(foodName: string): string {
