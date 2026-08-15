@@ -46,4 +46,16 @@ export class StudentService {
   getTodayMenus(): Observable<any> {
     return this.http.get('http://localhost:5000/api/menu/today');
   }
+
+  submitFeedback(data: any): Observable<any> {
+    return this.http.post('http://localhost:5000/api/support/feedback', data, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  submitReport(data: any): Observable<any> {
+    return this.http.post('http://localhost:5000/api/support/report', data, {
+      headers: this.getHeaders(),
+    });
+  }
 }
