@@ -6,7 +6,7 @@
         <div class="welcome-section">
           <h1>Welcome Back 👋</h1>
           <p>
-            Good {{ greeting }}, <span>{{ manager.fullName }}</span>
+            Good {{ greeting }}, <span>{{ manager?.fullName || 'Manager' }}</span>
           </p>
         </div>
         <div class="notification-section">
@@ -202,7 +202,7 @@
           <tbody>
             <tr *ngFor="let o of orders">
               <td>{{ o.studentName }}</td>
-              <td>{{ o.foodName }}</td>
+              <td>{{ o.displayFoodName }}</td>
               <td>₹ {{ o.totalPrice }}</td>
               <td>{{ o.createdAt | date: 'short' }}</td>
               <td class="actions">
@@ -384,7 +384,232 @@
         </div>
       </div>
     </ng-container>
+    <!-- ===== PAYMENTS ===== -->
+    <ng-container *ngIf="activeSection === 'payments'">
+      <div class="section-header">
+        <h1>Payments</h1>
+      </div>
 
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Email</th>
+              <th>Order</th>
+              <th>Amount</th>
+              <th>Payment Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let payment of payments">
+              <td>
+                {{ payment.studentId?.fullName || 'N/A' }}
+              </td>
+
+              <td>
+                {{ payment.studentId?.email || 'N/A' }}
+              </td>
+
+              <td>
+                {{ payment.orderId?._id || payment.orderId || 'N/A' }}
+              </td>
+
+              <td>₹ {{ payment.amount || payment.totalAmount || 0 }}</td>
+
+              <td>
+                <span
+                  class="status-badge"
+                  [class.active]="payment.paymentStatus === 'Paid'"
+                  [class.inactive]="payment.paymentStatus !== 'Paid'"
+                >
+                  {{ payment.paymentStatus }}
+                </span>
+              </td>
+
+              <td>
+                {{ payment.createdAt | date: 'short' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="empty-state" *ngIf="payments.length === 0">
+          <p>No payments found.</p>
+        </div>
+      </div>
+    </ng-container>
+    <!-- ===== ANNOUNCEMENTS ===== -->
+    <ng-container *ngIf="activeSection === 'announcements'">
+      <div class="section-header">
+        <div>
+          <h1>Announcements</h1>
+          <p class="section-subtitle">Create and manage announcements for students</p>
+        </div>
+
+        <button class="btn-primary" (click)="showAnnouncementForm = true">
+          <i class="fa-solid fa-plus"></i>
+          New Announcement
+        </button>
+      </div>
+
+      <!-- Announcement List -->
+      <div class="announcements-grid">
+        <div
+          class="announcement-card"
+          *ngFor="let a of announcements"
+          [class.inactive-announcement]="!a.isActive"
+        >
+          <!-- Header -->
+          <div class="announcement-card-header">
+            <div class="announcement-icon">
+              <i class="fa-solid fa-bullhorn"></i>
+            </div>
+
+            <div class="announcement-heading">
+              <h3>{{ a.title }}</h3>
+
+              <span class="announcement-date">
+                {{ a.createdAt | date: 'medium' }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Message -->
+          <p class="announcement-message">
+            {{ a.message }}
+          </p>
+
+          <!-- Footer -->
+          <div class="announcement-footer">
+            <span
+              class="announcement-status"
+              [class.active]="a.isActive"
+              [class.inactive]="!a.isActive"
+            >
+              {{ a.isActive ? 'Active' : 'Inactive' }}
+            </span>
+
+            <div class="announcement-actions">
+              <!-- Edit -->
+              <button class="btn-sm btn-edit" (click)="editAnnouncement(a)">
+                <i class="fa-solid fa-pen"></i>
+                Edit
+              </button>
+
+              <!-- Enable / Disable -->
+              <button class="btn-sm btn-toggle" (click)="toggleAnnouncement(a)">
+                <i
+                  class="fa-solid"
+                  [class.fa-eye-slash]="a.isActive"
+                  [class.fa-eye]="!a.isActive"
+                ></i>
+
+                {{ a.isActive ? 'Disable' : 'Enable' }}
+              </button>
+
+              <!-- Delete -->
+              <button class="btn-sm btn-delete" (click)="deleteAnnouncement(a._id)">
+                <i class="fa-solid fa-trash"></i>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="announcements.length === 0">
+          <i class="fa-solid fa-bullhorn"></i>
+          <p>No announcements available.</p>
+
+          <button class="btn-primary" (click)="showAnnouncementForm = true">
+            <i class="fa-solid fa-plus"></i>
+            Create Announcement
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== ADD / EDIT ANNOUNCEMENT MODAL ===== -->
+
+      <div class="modal-overlay" *ngIf="showAnnouncementForm" (click)="closeAnnouncementForm()">
+        <div class="modal announcement-modal" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <div>
+              <h2>
+                {{ editingAnnouncement ? 'Edit Announcement' : 'New Announcement' }}
+              </h2>
+
+              <p>Share important information with students</p>
+            </div>
+
+            <button class="modal-close" (click)="closeAnnouncementForm()">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <!-- Title -->
+          <div class="form-group">
+            <label>Announcement Title</label>
+
+            <input
+              type="text"
+              [(ngModel)]="announcementData.title"
+              placeholder="Enter announcement title"
+            />
+          </div>
+
+          <!-- Message -->
+          <div class="form-group">
+            <label>Message</label>
+
+            <textarea
+              rows="5"
+              [(ngModel)]="announcementData.message"
+              placeholder="Enter announcement message"
+            ></textarea>
+          </div>
+
+          <!-- Target -->
+          <div class="form-group">
+            <label>Target Audience</label>
+
+            <select [(ngModel)]="announcementData.targetRole">
+              <option value="student">Students</option>
+
+              <option value="all">Everyone</option>
+            </select>
+          </div>
+
+          <!-- Active Status -->
+          <div class="form-group">
+            <label>Announcement Status</label>
+
+            <select [(ngModel)]="announcementData.isActive">
+              <option [ngValue]="true">Active</option>
+
+              <option [ngValue]="false">Inactive</option>
+            </select>
+          </div>
+
+          <!-- Actions -->
+          <div class="form-actions">
+            <button class="btn-cancel" (click)="closeAnnouncementForm()">Cancel</button>
+
+            <button class="btn-submit" (click)="saveAnnouncement()">
+              <i
+                class="fa-solid"
+                [class.fa-pen]="editingAnnouncement"
+                [class.fa-paper-plane]="!editingAnnouncement"
+              ></i>
+
+              {{ editingAnnouncement ? 'Update Announcement' : 'Publish Announcement' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
     <!-- ===== ANALYTICS ===== -->
     <ng-container *ngIf="activeSection === 'analytics'">
       <div class="section-header"><h1>Analytics</h1></div>
@@ -442,48 +667,159 @@
       </div>
     </ng-container>
 
-    <!-- ===== PROFILE ===== -->
+    <!-- ================= PROFILE ================= -->
+
     <ng-container *ngIf="activeSection === 'profile'">
-      <div class="section-header"><h1>Profile</h1></div>
-      <div class="profile-card">
-        <div class="profile-avatar"><i class="fa-solid fa-user"></i></div>
-        <div *ngIf="!isEditingProfile">
-          <div class="info-row">
-            <label>Full Name</label>
-            <p>{{ manager.fullName }}</p>
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+      <div class="profile-section-title">
+        <span class="material-icons">person</span>
+        <h1>Profile</h1>
+      </div>
+
+      <div class="manager-profile-wrapper">
+        <div class="manager-profile-card">
+          <!-- PROFILE HEADER -->
+          <div class="manager-profile-header">
+            <div class="manager-profile-avatar">
+              <span class="material-icons">person</span>
+            </div>
+
+            <div class="manager-profile-name">
+              <h2>{{ manager.fullName || 'Manager' }}</h2>
+              <p>
+                <span class="material-icons">badge</span>
+                Manager
+              </p>
+            </div>
           </div>
-          <div class="info-row">
-            <label>Employee ID</label>
-            <p>{{ manager.employeeId }}</p>
+
+          <!-- PROFILE DETAILS -->
+          <div class="manager-profile-details" *ngIf="!isEditingProfile">
+            <!-- FULL NAME -->
+            <div class="manager-info-row">
+              <div class="manager-info-icon">
+                <span class="material-icons">person</span>
+              </div>
+
+              <div class="manager-info-content">
+                <label>Full Name</label>
+                <p>{{ manager.fullName || '-' }}</p>
+              </div>
+            </div>
+
+            <!-- EMPLOYEE ID -->
+            <div class="manager-info-row">
+              <div class="manager-info-icon">
+                <span class="material-icons">badge</span>
+              </div>
+
+              <div class="manager-info-content">
+                <label>Employee ID</label>
+                <p>{{ manager.employeeId || '-' }}</p>
+              </div>
+            </div>
+
+            <!-- EXPERIENCE -->
+            <div class="manager-info-row">
+              <div class="manager-info-icon">
+                <span class="material-icons">work</span>
+              </div>
+
+              <div class="manager-info-content">
+                <label>Experience</label>
+                <p>{{ manager.experience || 0 }} years</p>
+              </div>
+            </div>
+
+            <!-- SHIFT -->
+            <div class="manager-info-row">
+              <div class="manager-info-icon">
+                <span class="material-icons">schedule</span>
+              </div>
+
+              <div class="manager-info-content">
+                <label>Shift</label>
+                <p>{{ manager.shift || '-' }}</p>
+              </div>
+            </div>
+
+            <!-- PHONE -->
+            <div class="manager-info-row">
+              <div class="manager-info-icon">
+                <span class="material-icons">phone</span>
+              </div>
+
+              <div class="manager-info-content">
+                <label>Phone</label>
+                <p>{{ manager.phone || '-' }}</p>
+              </div>
+            </div>
+
+            <!-- EDIT BUTTON -->
+            <div class="manager-profile-button">
+              <button class="manager-edit-btn" (click)="isEditingProfile = true">
+                <span class="material-icons">edit</span>
+                Edit Profile
+              </button>
+            </div>
           </div>
-          <div class="info-row">
-            <label>Experience</label>
-            <p>{{ manager.experience }} years</p>
-          </div>
-          <div class="info-row">
-            <label>Shift</label>
-            <p>{{ manager.shift }}</p>
-          </div>
-          <button class="btn-submit" (click)="isEditingProfile = true">Edit Profile</button>
-        </div>
-        <div *ngIf="isEditingProfile">
-          <div class="form-group">
-            <label>Full Name</label><input type="text" [(ngModel)]="editProfile.fullName" />
-          </div>
-          <div class="form-group">
-            <label>Phone</label><input type="text" [(ngModel)]="editProfile.phone" />
-          </div>
-          <div class="form-group">
-            <label>Shift</label>
-            <select [(ngModel)]="editProfile.shift">
-              <option value="Morning">Morning</option>
-              <option value="Evening">Evening</option>
-              <option value="Night">Night</option>
-            </select>
-          </div>
-          <div class="form-actions">
-            <button class="btn-cancel" (click)="isEditingProfile = false">Cancel</button>
-            <button class="btn-submit" (click)="saveProfile()">Save</button>
+
+          <!-- ================= EDIT PROFILE ================= -->
+
+          <div class="manager-profile-edit" *ngIf="isEditingProfile">
+            <div class="edit-profile-title">
+              <span class="material-icons">manage_accounts</span>
+              <h3>Edit Profile</h3>
+            </div>
+
+            <!-- FULL NAME -->
+            <div class="manager-form-group">
+              <label>
+                <span class="material-icons">person</span>
+                Full Name
+              </label>
+
+              <input type="text" [(ngModel)]="editProfile.fullName" placeholder="Enter full name" />
+            </div>
+
+            <!-- PHONE -->
+            <div class="manager-form-group">
+              <label>
+                <span class="material-icons">phone</span>
+                Phone
+              </label>
+
+              <input type="text" [(ngModel)]="editProfile.phone" placeholder="Enter phone number" />
+            </div>
+
+            <!-- SHIFT -->
+            <div class="manager-form-group">
+              <label>
+                <span class="material-icons">schedule</span>
+                Shift
+              </label>
+
+              <select [(ngModel)]="editProfile.shift">
+                <option value="Morning">Morning</option>
+                <option value="Afternoon">Afternoon</option>
+                <option value="Evening">Evening</option>
+                <option value="Night">Night</option>
+              </select>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="manager-profile-actions">
+              <button class="manager-cancel-btn" (click)="isEditingProfile = false">
+                <span class="material-icons">close</span>
+                Cancel
+              </button>
+
+              <button class="manager-save-btn" (click)="saveProfile()">
+                <span class="material-icons">check</span>
+                Save Changes
+              </button>
+            </div>
           </div>
         </div>
       </div>

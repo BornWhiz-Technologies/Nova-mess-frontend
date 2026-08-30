@@ -120,7 +120,61 @@ export class ManagerService {
       },
     );
   }
+  // ===============================
+  // PAYMENTS
+  // ===============================
 
+  // Get all payments - Manager
+  getAllPayments(): Observable<any> {
+    return this.http.get('http://localhost:5000/api/payments/all', {
+      headers: this.getHeaders(),
+    });
+  }
+
+  // Get payment by order
+  getPaymentByOrder(orderId: string): Observable<any> {
+    return this.http.get(`http://localhost:5000/api/payments/${orderId}`, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  // Update payment status
+  updatePaymentStatus(id: string, status: string): Observable<any> {
+    return this.http.put(
+      `http://localhost:5000/api/payments/${id}/status`,
+      { status },
+      {
+        headers: this.getHeaders(),
+      },
+    );
+  }
+  // ===============================
+  // ANNOUNCEMENTS
+  // ===============================
+
+  getAnnouncements(): Observable<any> {
+    return this.http.get('http://localhost:5000/api/announcements', {
+      headers: this.getHeaders(),
+    });
+  }
+
+  createAnnouncement(data: any): Observable<any> {
+    return this.http.post('http://localhost:5000/api/announcements', data, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  updateAnnouncement(id: string, data: any): Observable<any> {
+    return this.http.put(`http://localhost:5000/api/announcements/${id}`, data, {
+      headers: this.getHeaders(),
+    });
+  }
+
+  deleteAnnouncement(id: string): Observable<any> {
+    return this.http.delete(`http://localhost:5000/api/announcements/${id}`, {
+      headers: this.getHeaders(),
+    });
+  }
   // ===============================
   // SUPPORT - FEEDBACK & REPORTS
   // ===============================

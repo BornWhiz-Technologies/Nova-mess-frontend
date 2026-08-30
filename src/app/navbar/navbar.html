@@ -8,9 +8,30 @@
     <h2 class="logo">MESS <span>NOVA</span></h2>
   </div>
 
-  <div class="nav-right" *ngIf="showAuthButtons">
-    <button class="login-btn" routerLink="/login">Login</button>
-    <button class="signup-btn" routerLink="/signup">Sign Up</button>
+  <div class="nav-right">
+    <!-- NOT LOGGED IN -->
+    <ng-container *ngIf="!isLoggedIn">
+      <button class="login-btn" routerLink="/login">Login</button>
+      <button class="signup-btn" routerLink="/signup">Sign Up</button>
+    </ng-container>
+
+    <!-- LOGGED IN -->
+    <ng-container *ngIf="isLoggedIn">
+      <!-- Notification -->
+      <button class="navbar-icon-btn" title="Notifications" (click)="openNotifications()">
+        <span class="material-icons">notifications</span>
+
+        <!-- Unread count -->
+        <span class="notification-badge" *ngIf="unreadCount > 0">
+          {{ unreadCount }}
+        </span>
+      </button>
+
+      <!-- Profile -->
+      <button class="navbar-icon-btn profile-btn" title="Profile" (click)="openProfile()">
+        <span class="material-icons">person</span>
+      </button>
+    </ng-container>
   </div>
 </header>
 

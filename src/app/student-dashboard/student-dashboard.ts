@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentService } from '../services/student';
 import { ChangeDetectorRef } from '@angular/core';
-
+import { NotificationService } from '../services/notification';
+import { ProfileService } from '../services/profile';
 @Component({
   selector: 'app-student-dashboard',
   standalone: true,
@@ -14,6 +15,7 @@ import { ChangeDetectorRef } from '@angular/core';
 })
 export class StudentDashboard implements OnInit {
   activeSection: string = 'dashboard';
+  greeting: string = '';
 
   supportOption: string = '';
 
@@ -27,6 +29,7 @@ export class StudentDashboard implements OnInit {
   department = 'Information Technology';
   year = 'II Year';
   section = 'A';
+  profile: any = null;
 
   todayMenu: any = null;
 
@@ -36,11 +39,7 @@ export class StudentDashboard implements OnInit {
     image: 'assets/food.png',
   };
 
-  announcements = [
-    'Tomorrow Breakfast starts at 7:00 AM.',
-    'Friday Special Meals Available.',
-    'Please carry your Student ID Card.',
-  ];
+  announcements: any[] = [];
 
   menuItems: any[] = [];
   orderHistory: any[] = [];
@@ -51,14 +50,36 @@ export class StudentDashboard implements OnInit {
 
   isLoading = false;
 
+  cartItems: any[] = [];
+  cartTotal = 0;
+
+  showPaymentPopup = false;
+
+  selectedPaymentMethod: string = '';
+  selectedPaymentOption: string = '';
+
+  paymentPopupType: string = '';
+
+  showBillPopup = false;
+  billOrder: any = null;
+  billPayment: any = null;
+  bills: any[] = [];
+
+  notifications: any[] = [];
+  profileData: any = null;
+
   constructor(
     private studentService: StudentService,
+    private notificationService: NotificationService,
+    private profileService: ProfileService,
     private route: ActivatedRoute,
     private router: Router,
     private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
+    this.setGreeting();
+
     this.route.queryParams.subscribe((params) => {
       const section = params['section'] || 'dashboard';
 
@@ -73,6 +94,21 @@ export class StudentDashboard implements OnInit {
   }
 
   // ===============================
+  // GREETING
+  // ===============================
+
+  setGreeting() {
+    const hour = new Date().getHours();
+
+    if (hour < 12) {
+      this.greeting = 'Good Morning';
+    } else if (hour < 17) {
+      this.greeting = 'Good Afternoon';
+    } else {
+      this.greeting = 'Good Evening';
+    }
+  }
+  // ===============================
   // SECTION NAVIGATION
   // ===============================
 
@@ -80,14 +116,31 @@ export class StudentDashboard implements OnInit {
     switch (section) {
       case 'dashboard':
         this.loadDashboardData();
+        this.loadAnnouncements();
         break;
 
       case 'menu':
         this.loadTodayMenu();
         break;
 
+      case 'cart':
+        this.loadCart();
+        break;
+
       case 'orders':
         this.loadOrders();
+        break;
+
+      case 'bills':
+        this.loadBills();
+        break;
+
+      case 'payment':
+        this.loadCart();
+        break;
+
+      case 'notifications':
+        this.loadNotifications();
         break;
 
       case 'profile':
@@ -149,6 +202,49 @@ export class StudentDashboard implements OnInit {
       },
     });
   }
+  // ===============================
+  // ANNOUNCEMENTS
+  // ===============================
+
+  loadAnnouncements() {
+    this.studentService.getAnnouncements().subscribe({
+      next: (res: any) => {
+        console.log('ANNOUNCEMENTS RESPONSE:', res);
+
+        this.announcements = Array.isArray(res?.data) ? res.data : [];
+
+        this.cdr.detectChanges();
+      },
+
+      error: (err: any) => {
+        console.error('Unable to load announcements:', err);
+        this.announcements = [];
+        this.cdr.detectChanges();
+      },
+    });
+  }
+  loadNotifications() {
+    this.isLoading = true;
+
+    this.notificationService.getNotifications().subscribe({
+      next: (res: any) => {
+        console.log('NOTIFICATIONS RESPONSE:', res);
+
+        this.notifications = Array.isArray(res?.data) ? res.data : [];
+
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+
+      error: (err: any) => {
+        console.error('Unable to load notifications:', err);
+
+        this.notifications = [];
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+    });
+  }
 
   // ===============================
   // PROFILE
@@ -157,30 +253,36 @@ export class StudentDashboard implements OnInit {
   loadProfile() {
     this.isLoading = true;
 
-    this.studentService.getDashboard().subscribe({
+    this.profileService.getProfile().subscribe({
       next: (res: any) => {
         console.log('PROFILE RESPONSE:', res);
 
-        const profile = res?.data?.profile;
+        if (res?.success) {
+          this.profileData = res.data;
 
-        if (profile) {
-          this.studentName = profile.fullName || profile.username || this.studentName;
+          const user = res?.data?.user;
+          const profile = res?.data?.profile;
 
-          this.department = profile.department || '-';
-          this.year = profile.year || '-';
-          this.section = profile.section || '-';
+          if (user) {
+            this.studentName = user.fullName || user.username || this.studentName;
+          }
+
+          if (profile) {
+            this.department = profile.department || '-';
+            this.year = profile.year || '-';
+            this.section = profile.section || '-';
+          }
         }
 
         this.isLoading = false;
-
         this.cdr.detectChanges();
       },
 
-      error: (err) => {
+      error: (err: any) => {
         console.error('Unable to load profile:', err);
 
+        this.profileData = null;
         this.isLoading = false;
-
         this.cdr.detectChanges();
       },
     });
@@ -252,6 +354,37 @@ export class StudentDashboard implements OnInit {
   }
 
   // ===============================
+  // BILLS
+  // ===============================
+
+  loadBills() {
+    this.isLoading = true;
+
+    this.studentService.getStudentBills().subscribe({
+      next: (res: any) => {
+        console.log('BILLS RESPONSE:', res);
+
+        if (res?.success) {
+          this.bills = res.data || [];
+        } else {
+          this.bills = [];
+        }
+
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+
+      error: (err: any) => {
+        console.error('Unable to load student bills:', err);
+
+        this.bills = [];
+
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+    });
+  }
+  // ===============================
   // ORDER NOW
   // ===============================
 
@@ -273,7 +406,6 @@ export class StudentDashboard implements OnInit {
     }
 
     const order = {
-      menuId: this.selectedFood._id,
       studentName: this.studentName,
       foodName: this.selectedFood.foodName,
       quantity: this.quantity,
@@ -416,7 +548,365 @@ export class StudentDashboard implements OnInit {
       },
     });
   }
+  // ===============================
+  // CART FUNCTIONS
+  // ===============================
 
+  addToCart(food: any) {
+    const cartData = {
+      foodName: food.foodName,
+      price: Number(food.price),
+      quantity: 1,
+    };
+
+    console.log('Sending Cart Data:', cartData);
+
+    this.studentService.addToCart(cartData).subscribe({
+      next: (res: any) => {
+        console.log('CART API RESPONSE:', res);
+
+        alert(res.message || 'Item added to cart successfully');
+
+        this.loadCart();
+
+        this.goToSection('cart');
+      },
+
+      error: (err: any) => {
+        console.error('CART API ERROR:', err);
+
+        alert(err.error?.message || 'Unable to add item to cart');
+      },
+    });
+  }
+
+  loadCart() {
+    this.studentService.getCart().subscribe({
+      next: (res: any) => {
+        console.log('CART RESPONSE:', res);
+
+        this.cartItems = res?.data?.items || [];
+
+        this.calculateCartTotal();
+
+        this.cdr.detectChanges();
+      },
+
+      error: (err: any) => {
+        console.error('CART LOAD ERROR:', err);
+
+        this.cartItems = [];
+        this.cartTotal = 0;
+      },
+    });
+  }
+
+  increaseQuantity(item: any) {
+    item.quantity++;
+
+    this.calculateCartTotal();
+  }
+
+  decreaseQuantity(item: any) {
+    if (item.quantity > 1) {
+      item.quantity--;
+    } else {
+      this.removeFromCart(item.foodName);
+
+      return;
+    }
+
+    this.calculateCartTotal();
+  }
+
+  removeFromCart(foodName: string) {
+    this.studentService.removeFromCart(foodName).subscribe({
+      next: (res: any) => {
+        console.log('REMOVE CART RESPONSE:', res);
+
+        if (res.success) {
+          this.cartItems = res.data?.items || [];
+          this.cartTotal = res.data?.totalAmount || 0;
+
+          this.cdr.detectChanges();
+
+          alert('Item removed from cart');
+        } else {
+          alert(res.message || 'Unable to remove item');
+        }
+      },
+
+      error: (err: any) => {
+        console.error('REMOVE CART ERROR:', err);
+
+        alert(err.error?.message || 'Unable to remove item from cart');
+      },
+    });
+  }
+
+  calculateCartTotal() {
+    this.cartTotal = this.cartItems.reduce(
+      (total: number, item: any) => total + item.price * item.quantity,
+      0,
+    );
+  }
+
+  selectPaymentMethod(method: string) {
+    this.selectedPaymentMethod = method;
+    this.selectedPaymentOption = '';
+
+    if (method === 'UPI') {
+      this.paymentPopupType = 'UPI';
+      this.showPaymentPopup = true;
+    }
+
+    if (method === 'Card') {
+      this.paymentPopupType = 'Card';
+      this.showPaymentPopup = true;
+    }
+
+    if (method === 'Cash') {
+      this.paymentPopupType = 'Cash';
+      this.selectedPaymentOption = 'Cash';
+      this.showPaymentPopup = true;
+    }
+  }
+  selectPaymentOption(option: string) {
+    this.selectedPaymentOption = option;
+
+    console.log('Selected Payment Option:', option);
+  }
+  confirmPayment() {
+    if (!this.selectedPaymentMethod) {
+      alert('Please select a payment method');
+      return;
+    }
+
+    if (this.cartItems.length === 0) {
+      alert('Your cart is empty');
+      return;
+    }
+
+    // =========================
+    // STEP 1: PREPARE ALL CART ITEMS
+    // =========================
+
+    const orderItems = this.cartItems.map((item: any) => ({
+      foodName: item.foodName,
+      price: Number(item.price),
+      quantity: Number(item.quantity),
+    }));
+
+    const orderData = {
+      studentName: this.studentName,
+      items: orderItems,
+      totalPrice: this.cartTotal,
+    };
+
+    console.log('CREATING ORDER:', orderData);
+
+    // =========================
+    // STEP 2: CREATE ONE ORDER
+    // =========================
+
+    this.studentService.placeOrder(orderData).subscribe({
+      next: (orderRes: any) => {
+        console.log('ORDER RESPONSE:', orderRes);
+
+        if (!orderRes.success) {
+          alert(orderRes.message || 'Unable to create order');
+          return;
+        }
+
+        const orderId = orderRes.data._id;
+
+        console.log('ORDER ID:', orderId);
+
+        // =========================
+        // STEP 3: CREATE PAYMENT
+        // =========================
+
+        const paymentData = {
+          orderId: orderId,
+          amount: this.cartTotal,
+          paymentMethod: this.selectedPaymentMethod,
+          paymentOption: this.selectedPaymentOption,
+          paymentStatus: this.selectedPaymentMethod === 'Cash' ? 'Pending' : 'Paid',
+        };
+
+        console.log('CREATING PAYMENT:', paymentData);
+
+        this.studentService.confirmPayment(paymentData).subscribe({
+          next: (paymentRes: any) => {
+            console.log('PAYMENT RESPONSE:', paymentRes);
+
+            if (paymentRes.success) {
+              alert(
+                this.selectedPaymentMethod === 'Cash'
+                  ? 'Cash order confirmed successfully'
+                  : 'Payment successful',
+              );
+              this.billOrder = orderRes.data;
+              this.billPayment = paymentRes.data;
+              this.showBillPopup = true;
+
+              // Remove all paid items from database cart
+              this.cartItems.forEach((item: any) => {
+                this.studentService.removeFromCart(item.foodName).subscribe({
+                  next: (removeRes: any) => {
+                    console.log('CART ITEM REMOVED:', item.foodName, removeRes);
+                  },
+
+                  error: (err: any) => {
+                    console.error('FAILED TO REMOVE CART ITEM:', item.foodName, err);
+                  },
+                });
+              });
+
+              // =========================
+              // CLEAR PAYMENT + CART
+              // =========================
+
+              this.selectedPaymentMethod = '';
+              this.selectedPaymentOption = '';
+              this.showPaymentPopup = false;
+              this.paymentPopupType = '';
+
+              this.cartItems = [];
+              this.cartTotal = 0;
+
+              // =========================
+              // REFRESH ORDERS
+              // =========================
+
+              this.loadOrders();
+              this.loadBills();
+            } else {
+              alert(paymentRes.message || 'Payment failed');
+            }
+          },
+
+          error: (err: any) => {
+            console.error('PAYMENT ERROR:', err);
+
+            alert(err.error?.message || 'Unable to process payment. Please try again.');
+          },
+        });
+      },
+
+      error: (err: any) => {
+        console.error('ORDER ERROR:', err);
+
+        alert(err.error?.message || 'Unable to create order. Please try again.');
+      },
+    });
+  }
+  closePaymentPopup() {
+    this.showPaymentPopup = false;
+    this.selectedPaymentOption = '';
+  }
+  goToSection(section: string) {
+    this.router.navigate([], {
+      queryParams: { section },
+      queryParamsHandling: 'merge',
+    });
+  }
+  downloadBill() {
+    if (!this.billOrder) {
+      alert('No bill available');
+      return;
+    }
+
+    const billId = this.billPayment?._id || this.billOrder?._id || 'bill';
+
+    const billDate = this.billOrder?.createdAt
+      ? new Date(this.billOrder.createdAt).toLocaleString()
+      : new Date().toLocaleString();
+
+    const paymentMode = this.billPayment?.paymentMethod || '-';
+
+    const items = this.billOrder?.items || [];
+
+    let itemsHtml = '';
+
+    items.forEach((item: any) => {
+      itemsHtml += `
+      <tr>
+        <td>${item.foodName}</td>
+        <td>${item.quantity}</td>
+        <td>₹${item.price}</td>
+        <td>₹${item.price * item.quantity}</td>
+      </tr>
+    `;
+    });
+
+    const billHtml = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <title>Mess Nova Bill</title>
+      <link rel="stylesheet" href="bill.css">
+    </head>
+
+    <body>
+
+      <div class="bill">
+
+        <h1>MESS NOVA</h1>
+
+        <p class="paid">PAID</p>
+
+        <div class="info">
+          <strong>Student:</strong> ${this.studentName}<br>
+          <strong>Bill ID:</strong> ${billId}<br>
+          <strong>Date & Time:</strong> ${billDate}<br>
+          <strong>Payment Mode:</strong> ${paymentMode}
+        </div>
+
+        <h3>Ordered Items</h3>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Food</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            ${itemsHtml}
+          </tbody>
+        </table>
+
+        <div class="total">
+          Total Paid:
+          ₹${this.billOrder?.totalPrice || this.billPayment?.amount || 0}
+        </div>
+
+      </div>
+
+    </body>
+    </html>
+  `;
+
+    const blob = new Blob([billHtml], {
+      type: 'text/html',
+    });
+
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.download = `MessNova-Bill-${billId}.html`;
+
+    link.click();
+
+    window.URL.revokeObjectURL(url);
+  }
   getFoodImage(foodName: string): string {
     if (!foodName) return 'foods/default.jpg';
 
