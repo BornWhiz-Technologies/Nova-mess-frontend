@@ -263,3 +263,193 @@
     font-size: 12px;
   }
 }
+/* ===============================
+   MESS NOVA NAVBAR
+================================ */
+
+.navbar {
+  height: 88px;
+  width: 100%;
+  background: #082c20;
+  border-bottom: 2px solid #d4a73a;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 28px;
+  box-sizing: border-box;
+
+  color: #f6e3a1;
+}
+
+/* ===============================
+   LEFT SECTION
+================================ */
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* MENU BUTTON */
+
+.menu-btn {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: transparent;
+  border: 1px solid #d4a73a;
+  border-radius: 4px;
+
+  color: #d4a73a;
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.menu-btn:hover {
+  background: #d4a73a;
+  color: #082c20;
+}
+
+/* ===============================
+   LOGO
+================================ */
+
+.navbar-logo {
+  font-family: Georgia, serif;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: 1px;
+
+  color: #f5f1df;
+}
+
+.navbar-logo span {
+  color: #d4a73a;
+}
+
+/* ===============================
+   RIGHT ICONS
+================================ */
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar-icon-btn {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+
+  color: #d4a73a;
+
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.navbar-icon-btn .material-icons {
+  font-size: 27px;
+  color: #d4a73a;
+}
+
+/* HOVER */
+
+.navbar-icon-btn:hover {
+  background: rgba(212, 167, 58, 0.15);
+  transform: translateY(-1px);
+}
+
+/* ACTIVE */
+
+.navbar-icon-btn:active {
+  transform: scale(0.94);
+}
+
+/* ===============================
+   NOTIFICATION BADGE
+================================ */
+
+.notification-wrapper {
+  position: relative;
+}
+
+.notification-badge {
+  position: absolute;
+
+  top: 3px;
+  right: 2px;
+
+  min-width: 17px;
+  height: 17px;
+
+  padding: 0 4px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #d4a73a;
+  color: #082c20;
+
+  border-radius: 20px;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* ===============================
+   PROFILE
+================================ */
+
+.profile-btn {
+  border: 1px solid rgba(212, 167, 58, 0.45);
+}
+
+.profile-btn .material-icons {
+  color: #d4a73a;
+}
+
+/* ===============================
+   MOBILE
+================================ */
+
+@media (max-width: 768px) {
+  .navbar {
+    height: 72px;
+    padding: 0 16px;
+  }
+
+  .navbar-logo {
+    font-size: 23px;
+  }
+
+  .menu-btn,
+  .navbar-icon-btn {
+    width: 42px;
+    height: 42px;
+  }
+
+  .navbar-icon-btn .material-icons {
+    font-size: 24px;
+  }
+}

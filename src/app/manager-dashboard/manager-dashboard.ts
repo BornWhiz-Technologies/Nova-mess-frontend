@@ -54,11 +54,27 @@ export class ManagerDashboard implements OnInit {
   reportTab: 'complaints' | 'feedback' | 'resolved' = 'complaints';
   reports: any[] = [];
 
+  // Announcements
+  announcements: any[] = [];
+
+  showAnnouncementForm = false;
+  editingAnnouncement: any = null;
+
+  announcementData = {
+    title: '',
+    message: '',
+    targetRole: 'student',
+    isActive: true,
+  };
+
   // Analytics
   analytics: any = { totalRevenue: 0, totalOrders: 0, mostOrderedFood: '', weeklyData: [] };
 
   // Notifications
   notifications: any[] = [];
+
+  // Payments
+  payments: any[] = [];
 
   // Profile
   isEditingProfile = false;
@@ -125,11 +141,17 @@ export class ManagerDashboard implements OnInit {
       case 'reports':
         this.loadReports();
         break;
+      case 'announcements':
+        this.loadAnnouncements();
+        break;
       case 'analytics':
         this.loadAnalytics();
         break;
       case 'notifications':
         this.loadNotifications();
+        break;
+      case 'payments':
+        this.loadPayments();
         break;
       case 'profile':
         this.loadProfile();
@@ -141,9 +163,18 @@ export class ManagerDashboard implements OnInit {
   loadManagerProfile() {
     this.managerService.getManagerProfile().subscribe({
       next: (res: any) => {
-        this.manager = res.data;
+        console.log('MANAGER PROFILE:', res);
+
+        this.manager = res?.data || {};
+
+        console.log('MANAGER NAME:', this.manager?.fullName);
+
+        this.cdr.detectChanges();
       },
-      error: (err: any) => console.error(err),
+
+      error: (err: any) => {
+        console.error('Manager Profile Error:', err);
+      },
     });
   }
 
@@ -151,9 +182,18 @@ export class ManagerDashboard implements OnInit {
   loadDashboardSummary() {
     this.managerService.getDashboardSummary().subscribe({
       next: (res: any) => {
-        this.dashboard = res.data;
+        this.dashboard = res?.data || {};
+
+        // Load manager details for greeting name
+        this.loadManagerProfile();
       },
-      error: (err: any) => console.error(err),
+
+      error: (err: any) => {
+        console.error('Dashboard Summary Error:', err);
+
+        // Still load profile so name can appear
+        this.loadManagerProfile();
+      },
     });
   }
 
@@ -291,13 +331,36 @@ export class ManagerDashboard implements OnInit {
           return;
         }
 
-        this.orders = Array.isArray(res?.data) ? [...res.data] : [];
+        console.log('ORDERS RESPONSE:', res);
+
+        this.orders = Array.isArray(res?.data)
+          ? res.data.map((order: any) => ({
+              ...order,
+
+              displayFoodName:
+                order.foodName ||
+                order.mealName ||
+                order.menuItem?.foodName ||
+                order.items
+                  ?.map(
+                    (item: any) =>
+                      item.foodName ||
+                      item.name ||
+                      item.menuItem?.foodName ||
+                      item.menuId?.foodName ||
+                      item.productId?.foodName ||
+                      '',
+                  )
+                  .filter(Boolean)
+                  .join(', ') ||
+                'N/A',
+            }))
+          : [];
 
         this.cdr.detectChanges();
       },
 
       error: (err: any) => {
-        // Ignore old request errors
         if (requestId !== this.ordersRequestId) {
           return;
         }
@@ -389,7 +452,135 @@ export class ManagerDashboard implements OnInit {
       },
     });
   }
+  // ===============================
+  // ANNOUNCEMENTS
+  // ===============================
 
+  loadAnnouncements() {
+    this.managerService.getAnnouncements().subscribe({
+      next: (res: any) => {
+        console.log('ANNOUNCEMENTS RESPONSE:', res);
+
+        this.announcements = Array.isArray(res?.data) ? [...res.data] : [];
+
+        this.cdr.detectChanges();
+      },
+
+      error: (err: any) => {
+        console.error('Announcements API Error:', err);
+        this.announcements = [];
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  saveAnnouncement() {
+    if (!this.announcementData.title.trim()) {
+      alert('Please enter announcement title');
+      return;
+    }
+
+    if (!this.announcementData.message.trim()) {
+      alert('Please enter announcement message');
+      return;
+    }
+
+    if (this.editingAnnouncement) {
+      this.managerService
+        .updateAnnouncement(this.editingAnnouncement._id, this.announcementData)
+        .subscribe({
+          next: () => {
+            this.loadAnnouncements();
+            this.closeAnnouncementForm();
+            alert('Announcement updated successfully');
+          },
+
+          error: (err: any) => {
+            console.error(err);
+            alert('Failed to update announcement');
+          },
+        });
+    } else {
+      this.managerService.createAnnouncement(this.announcementData).subscribe({
+        next: () => {
+          this.loadAnnouncements();
+          this.closeAnnouncementForm();
+          alert('Announcement created successfully');
+        },
+
+        error: (err: any) => {
+          console.error(err);
+          alert('Failed to create announcement');
+        },
+      });
+    }
+  }
+
+  editAnnouncement(item: any) {
+    this.editingAnnouncement = item;
+
+    this.announcementData = {
+      title: item.title || '',
+      message: item.message || '',
+      targetRole: item.targetRole || 'student',
+      isActive: item.isActive ?? true,
+    };
+
+    this.showAnnouncementForm = true;
+  }
+
+  deleteAnnouncement(id: string) {
+    if (!confirm('Delete this announcement?')) {
+      return;
+    }
+
+    this.managerService.deleteAnnouncement(id).subscribe({
+      next: () => {
+        this.announcements = this.announcements.filter((item) => item._id !== id);
+
+        this.cdr.detectChanges();
+
+        alert('Announcement deleted successfully');
+      },
+
+      error: (err: any) => {
+        console.error(err);
+        alert('Failed to delete announcement');
+      },
+    });
+  }
+
+  toggleAnnouncement(item: any) {
+    this.managerService
+      .updateAnnouncement(item._id, {
+        isActive: !item.isActive,
+      })
+      .subscribe({
+        next: () => {
+          item.isActive = !item.isActive;
+          this.cdr.detectChanges();
+        },
+
+        error: (err: any) => {
+          console.error(err);
+          alert('Failed to update announcement status');
+        },
+      });
+  }
+
+  closeAnnouncementForm() {
+    this.showAnnouncementForm = false;
+    this.editingAnnouncement = null;
+
+    this.announcementData = {
+      title: '',
+      message: '',
+      targetRole: 'student',
+      isActive: true,
+    };
+
+    this.cdr.detectChanges();
+  }
   // Analytics
   loadAnalytics() {
     this.managerService.getAnalytics().subscribe({
@@ -399,7 +590,24 @@ export class ManagerDashboard implements OnInit {
       error: (err: any) => console.error(err),
     });
   }
+  // Payments
+  loadPayments() {
+    this.managerService.getAllPayments().subscribe({
+      next: (res: any) => {
+        console.log('PAYMENTS RESPONSE:', res);
 
+        this.payments = Array.isArray(res?.data) ? [...res.data] : [];
+
+        this.cdr.detectChanges();
+      },
+
+      error: (err: any) => {
+        console.error('Payments API Error:', err);
+        this.payments = [];
+        this.cdr.detectChanges();
+      },
+    });
+  }
   // Notifications
   loadNotifications() {
     this.managerService.getNotifications().subscribe({

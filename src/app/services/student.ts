@@ -58,4 +58,42 @@ export class StudentService {
       headers: this.getHeaders(),
     });
   }
+  getCart() {
+    const token = localStorage.getItem('token');
+
+    return this.http.get('http://localhost:5000/api/cart', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+  addToCart(data: any): Observable<any> {
+    return this.http.post('http://localhost:5000/api/cart/add', data, {
+      headers: this.getHeaders(),
+    });
+  }
+  removeFromCart(foodName: string): Observable<any> {
+    return this.http.delete(
+      `http://localhost:5000/api/cart/remove/${encodeURIComponent(foodName)}`,
+      {
+        headers: this.getHeaders(),
+      },
+    );
+  }
+  confirmPayment(paymentData: any): Observable<any> {
+    return this.http.post('http://localhost:5000/api/payments', paymentData, {
+      headers: this.getHeaders(),
+    });
+  }
+  getStudentBills(): Observable<any> {
+    return this.http.get('http://localhost:5000/api/student/bills', {
+      headers: this.getHeaders(),
+    });
+  }
+  getAnnouncements(): Observable<any> {
+    return this.http.get('http://localhost:5000/api/announcements', {
+      headers: this.getHeaders(),
+    });
+  }
+  
 }
